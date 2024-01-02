@@ -1,8 +1,8 @@
 import random
 from dataclasses import asdict, dataclass
+from typing import Any
 
 from fastapi import APIRouter
-from fastapi.responses import JSONResponse
 
 router = APIRouter()
 
@@ -126,12 +126,12 @@ mock_data = MockData()
 
 
 @router.get("/api/points/{contest_type}")
-def get_points(contest_type: int) -> JSONResponse:
+def get_points(contest_type: int) -> Any:
     return mock_data.points[contest_type]
 
 
 @router.get("/api/problems/{contest_type}")
-def get_problems(contest_type: int, begin: int = 1, end: int = 99) -> JSONResponse:
+def get_problems(contest_type: int, begin: int = 1, end: int = 99) -> Any:
     return [
         {asdict(problem)}
         for problem in mock_data.problems
@@ -142,7 +142,7 @@ def get_problems(contest_type: int, begin: int = 1, end: int = 99) -> JSONRespon
 
 
 @router.get("/api/problems/{contest_type}/count")
-def get_problems_counts(contest_type: int) -> JSONResponse:
+def get_problems_counts(contest_type: int) -> Any:
     counts = [0] * len(mock_data.points[contest_type])
     total_points = 0
     for problem in mock_data.problems:
@@ -159,12 +159,12 @@ def get_problems_counts(contest_type: int) -> JSONResponse:
 
 
 @router.get("/api/problem/{aoj_id}/acceptance_count")
-def get_problem_acceptance_count(aoj_id: int) -> JSONResponse:
+def get_problem_acceptance_count(aoj_id: int) -> Any:
     return 100
 
 
 @router.get("/api/problem/{aoj_id}/metainfo")
-def get_problem_metainfo(aoj_id: int) -> JSONResponse:
+def get_problem_metainfo(aoj_id: int) -> Any:
     return asdict(
         MockProblemMeta(
             "http://example.com",
@@ -176,12 +176,12 @@ def get_problem_metainfo(aoj_id: int) -> JSONResponse:
 
 
 @router.get("/api/ranking/{contest_type}")
-def get_ranking(contest_type: int, begin: int, end: int) -> JSONResponse:
+def get_ranking(contest_type: int, begin: int, end: int) -> Any:
     if end - begin > mock_data.allowed_max_ranking_retrieval:
         return []
     return mock_data.ranking[begin - 1 : end - 1]
 
 
 @router.get("/api/ranking/{contest_type}/user_count")
-def get_ranking_user_count(contest_type: int) -> JSONResponse:
+def get_ranking_user_count(contest_type: int) -> Any:
     return len(mock_data.ranking[contest_type])
