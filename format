@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+shopt -s globstar
+pipenv run black **/*.py
+pipenv run isort **/*.py
+pipenv run flake8 **/*.py
+pipenv run mypy **/*.py
