@@ -53,9 +53,5 @@ ul.nav li.menu a {
 
 ul.nav li.menu a:hover,
 ul.nav li.menu a:active {
-  background-color: #903090;
-}
-
-ul.nav li.active {
-  background-color: #101010;
+  background-color: #202020;
 }
