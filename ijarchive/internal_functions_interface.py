@@ -4,9 +4,9 @@ from typing import Optional
 
 
 @dataclass
-class DifficultyScope:
-    level_begin: int
-    level_end: int
+class LevelScope:
+    begin: int
+    end: int
 
 
 @dataclass
@@ -15,7 +15,7 @@ class Preference:
     aoj_userid: str
     rivals: list[str]
     exclude_solved: bool
-    difficulty_scope: list[DifficultyScope]
+    level_scopes: list[LevelScope]
 
 
 AOJAcceptanceInfo = dict[int, list[str]]
