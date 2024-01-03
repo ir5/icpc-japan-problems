@@ -2,6 +2,6 @@
 
 shopt -s globstar
 pipenv run black **/*.py
-pipenv run isort **/*.py
+pipenv run isort **/*.py --profile black
 pipenv run flake8 **/*.py
 pipenv run mypy **/*.py
