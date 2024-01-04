@@ -82,3 +82,19 @@ div.preference-upper button.contest-type-switcher {
   background-color: #909090;
   border-color: #909090;
 }
+
+/* local ranking */
+table.local-ranking {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+table.local-ranking th, table.local-ranking td {
+    border: 1px solid #888888;
+}
+
+table.local-ranking, table.local-ranking th, table.local-ranking td {
+    font-size: 1.0em;
+    text-align: center;
+    padding: 4px 2px 4px 2px
+}
