@@ -1,3 +1,11 @@
+/* common */
+div.container {
+  margin-left: auto;
+  margin-right: auto;
+  width: 1024px;
+}
+
+/* navbar */
 div.header-brand {
   background-color: #ffffff;
   padding: 0em 3em;
@@ -13,12 +21,6 @@ div.brand {
   color: #303030;
   text-shadow: 0 3px 8px #afafaf;
   text-decoration: none;
-}
-
-div.container {
-  margin-left: auto;
-  margin-right: auto;
-  width: 1024px;
 }
 
 ul.header-nav {
@@ -54,4 +56,29 @@ ul.nav li.menu a {
 ul.nav li.menu a:hover,
 ul.nav li.menu a:active {
   background-color: #202020;
+}
+
+/* preference */
+div.preference-upper {
+  padding: 8px 8px;
+  background-color: #e0e0e0;
+}
+
+div.preference-upper input.aojid {
+  height: 36px;
+  padding: 3px 6px;
+  border-radius: .25rem;
+}
+
+div.preference-upper input.aojid {
+  height: 36px;
+  padding: 3px 6px;
+  border-radius: .25rem;
+}
+
+div.preference-upper button.contest-type-switcher {
+  cursor: pointer;
+  color: #ffffff;
+  background-color: #909090;
+  border-color: #909090;
 }
