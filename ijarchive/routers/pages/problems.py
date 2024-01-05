@@ -6,7 +6,7 @@ router = APIRouter()
 templates = Jinja2Templates(directory="templates")
 
 
-@router.get("/", response_class=HTMLResponse)
+@router.get("/", response_class=HTMLResponse, name="problems")
 def read_item(request: Request):
     return templates.TemplateResponse(
         request=request, name="problems.html", context={"id": 123}

@@ -7,6 +7,7 @@
   {% include 'problems/problem_table.html' %}
 </div>
 
-<script src="{{ url_for('static', path='js/preference.js') }}"></script>
+<script async src="{{ url_for('static', path='js/preference.js') }}"
+  onload="setEvents('{{ url_for('problems') }}')"></script>
 
 {% include 'common/footer.html' %}

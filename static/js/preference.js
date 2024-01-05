@@ -1,4 +1,4 @@
-function onChangePreference(contestType = null) {
+function onChangePreference(redirectUrl, contestType = null) {
   let params = {}
   // values
   for (const id of ["aoj_userid", "point_lower_0", "point_upper_0", "point_lower_1", "point_upper_1"]) {
@@ -37,22 +37,24 @@ function onChangePreference(contestType = null) {
   }
 
   // redirect to new page
-  window.location.href = "/?" + paramString;  // note: hardcoded path is not preferred?
+  window.location.href = redirectUrl + "?" + paramString;
 }
 
-for (const id of ["ja", "en", "hide_solved", "point_lower_0", "point_upper_0", "point_lower_1", "point_upper_1"]) {
-  let element = document.getElementById(id);
-  element.addEventListener("change", function() { onChangePreference(); });
-}
+function setEvents(redirectUrl) {
+  for (const id of ["ja", "en", "hide_solved", "point_lower_0", "point_upper_0", "point_lower_1", "point_upper_1"]) {
+    let element = document.getElementById(id);
+    element.addEventListener("change", function() { onChangePreference(redirectUrl); });
+  }
 
-for (const id of ["aoj_userid", "rival_aoj_userid"]) {
-  let element = document.getElementById(id);
-  element.addEventListener("keydown", function(event) {
-    if (event.keyCode == 13) onChangePreference();
-  });
-}
+  for (const id of ["aoj_userid", "rival_aoj_userid"]) {
+    let element = document.getElementById(id);
+    element.addEventListener("keydown", function(event) {
+      if (event.keyCode == 13) onChangePreference(redirectUrl);
+    });
+  }
 
-for (const contestType of [0, 1]) {
-  let element = document.getElementById("contest_type_" + contestType);
-  element.addEventListener("click", function() { onChangePreference(contestType); });
+  for (const contestType of [0, 1]) {
+    let element = document.getElementById("contest_type_" + contestType);
+    element.addEventListener("click", function() { onChangePreference(redirectUrl, contestType); });
+  }
 }
