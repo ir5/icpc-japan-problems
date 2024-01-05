@@ -14,8 +14,3 @@ if os.environ.get("IJARCHIVE_USE_MOCK_API"):
     app.include_router(mock.router)
 
 app.include_router(problems.router)
-
-
-@app.get("/")
-def root():
-    return {"message": "Hello World From Fast API!"}
