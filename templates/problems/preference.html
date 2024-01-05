@@ -2,30 +2,32 @@
   <input class="aojid"
          type="text"
          placeholder="AOJ ID"
-         name="aoj_userid"
+         id="aoj_userid"
          tabindex="66"
          value="">
-  <input type="hidden" name="contest_type" value="0"/>
-  <button class="contest-type-switcher" type="button" name="contest_type_0">&#x1f5fe;Domestic</button>
-  <button class="contest-type-switcher" type="button" name="contest_type_1">&#x1f30f;Regional</button>
+  <input type="hidden" id="contest_type" value="0"/>
+  <button class="contest-type-switcher" type="button" id="contest_type_0">&#x1f5fe;Domestic</button>
+  <button class="contest-type-switcher" type="button" id="contest_type_1">&#x1f30f;Regional</button>
 </div>
 <div class="preference-lower">
   <label>
-    <input type="checkbox" name="ja" checked>&#x1f338;Japanese</input>
+    <input type="checkbox" id="ja" checked>&#x1f338;Japanese</input>
   </label>
   <label>
-    <input type="checkbox" name="en" checked>&#x1f310;English</input>
+    <input type="checkbox" id="en" checked>&#x1f310;English</input>
   </label>
   <label>
-    <input type="checkbox" name="hide_solved">Hide solved</input>
+    <input type="checkbox" id="hide_solved">Hide solved</input>
   </label>
   <label>
-    <select class="point-scope" name="point_lower_0">
+    <select class="point-scope" id="point_lower_0">
       <option value="1" selected>20</option>
     </select>
     &#x2012;
-    <select class="point-scope" name="point_upper_0">
+    <select class="point-scope" id="point_upper_0">
       <option value="11" selected>2330</option>
     </select>
   </label>
+  <input type="hidden" id="point_lower_1" value="1"/>
+  <input type="hidden" id="point_upper_1" value="9"/>
 </div>
