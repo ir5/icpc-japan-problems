@@ -98,3 +98,49 @@ table.local-ranking, table.local-ranking th, table.local-ranking td {
     text-align: center;
     padding: 4px 2px 4px 2px
 }
+
+/* problem table */
+table.problem-table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+table.problem-table th, table.problem-table td {
+    border: 1px solid #888888;
+}
+
+table.problem-table th, table.problem-table td {
+    font-size: 1em;
+    padding: 4px 7px 4px 7px;
+}
+
+table.problem-table th {
+    font-weight: bold;
+    font-size: 1em;
+    text-align: left;
+    background-color: #505050;
+    color: #eeeeee;
+}
+
+table.problem-table td {
+    color: #111111;
+}
+
+table.problem-table tr.solved {
+    background-color: #dff0d8;
+}
+
+table.problem-table tr.not-archived {
+    background-color: #bbbbbb;
+}
+
+table.problem-table tr.rivals-only {
+    background-color: #ffcccc;
+}
+
+table.problem-table td.separator {
+    background-color: #ffffff;
+    height: 6px;
+    border-left: none;
+    border-right: none;
+}

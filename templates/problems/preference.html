@@ -5,26 +5,27 @@
          name="aoj_userid"
          tabindex="66"
          value="">
-  <button class="contest-type-switcher" type="button">&#x1f5fe;Domestic</button>
-  <button class="contest-type-switcher" type="button">&#x1f30f;Regional</button>
+  <input type="hidden" name="contest_type" value="0"/>
+  <button class="contest-type-switcher" type="button" name="contest_type_0">&#x1f5fe;Domestic</button>
+  <button class="contest-type-switcher" type="button" name="contest_type_1">&#x1f30f;Regional</button>
 </div>
 <div class="preference-lower">
   <label>
-    <input type="checkbox" checked>&#x1f338;Japanese</input>
+    <input type="checkbox" name="ja" checked>&#x1f338;Japanese</input>
   </label>
   <label>
-    <input type="checkbox" checked>&#x1f310;English</input>
+    <input type="checkbox" name="en" checked>&#x1f310;English</input>
   </label>
   <label>
-    <input type="checkbox">Hide solved</input>
+    <input type="checkbox" name="hide_solved">Hide solved</input>
   </label>
   <label>
-    <select class="point-scope" name="point-lower">
-      <option selected>20</option>
+    <select class="point-scope" name="point_lower_0">
+      <option value="1" selected>20</option>
     </select>
     &#x2012;
-    <select class="point-scope" name="point-lower">
-      <option selected>6700</option>
+    <select class="point-scope" name="point_upper_0">
+      <option value="11" selected>2330</option>
     </select>
   </label>
 </div>
