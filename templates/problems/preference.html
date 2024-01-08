@@ -11,10 +11,10 @@
     </li>
 
     <li class="menu">
-      <button class="contest-type-switcher" type="button" id="contest_type_0">&#x1f5fe;Domestic</button>
-    </li>
-    <li class="menu">
-      <button class="contest-type-switcher" type="button" id="contest_type_1">&#x1f30f;Regional</button>
+      <div class="button-container">
+        <button class="contest-type-switcher {{ 'selected' if contest_type == 0 else '' }}" type="button" id="contest_type_0">&#x1f5fe;Domestic</button>
+        <button class="contest-type-switcher {{ 'selected' if contest_type == 1 else '' }}" type="button" id="contest_type_1">&#x1f30f;Regional</button>
+      </div>
     </li>
 
     <li class="menu">

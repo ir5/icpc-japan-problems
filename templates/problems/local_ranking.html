@@ -1,12 +1,21 @@
 {% from "problems/macros.html" import point_decor with context %}
 <table class="local-ranking">
   <tr>
+    <td class="no-border"></td>
+    <td class="no-border"></td>
+    <td class="no-border"></td>
+    <td class="no-border"></td>
+    {% for point in points %}
+    <td class="no-border">&#x25BC;</td>
+    {% endfor %}
+  </tr>
+  <tr>
     <th>#</th>
     <th>ID</th>
     <th>POINTS</th>
     <th>SOLVED</th>
     {% for point in points %}
-    <th>{{ point_decor(point) | trim }}{{ point }}</th>
+    <th><a href="#" class="select-level-lower">{{ point_decor(point) | trim }}{{ point }}</a></th>
     {% endfor %}
   </tr>
   <tr>

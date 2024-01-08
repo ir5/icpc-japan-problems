@@ -41,6 +41,8 @@ def get_problems(request: Request,
 
     functions = InternalFunctions()
     context: dict[str, Any] = {}
+    context["level_lower"] = level_scopes[contest_type].begin
+    context["contest_type"] = contest_type
     context["points"] = functions.get_points(contest_type)
     context["problems"] = functions.get_problems(preference)
     context["total_row"] = functions.get_problems_total_row(contest_type)

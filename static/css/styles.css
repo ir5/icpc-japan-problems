@@ -96,11 +96,37 @@ div.preference input.aojid {
   border-radius: .25rem;
 }
 
+div.button-container {
+  display: flex;
+  gap: 0px;
+}
+
 div.preference button.contest-type-switcher {
+  margin-left: 0;
+  display: inline-block;
+  padding: 1px 20px;
+  text-align: center;
+  text-decoration: none;
+  font-size: 1rem;
+  border: 0px;
+  background-color: #666;
+  height: 2rem;
+  color: #fff;
   cursor: pointer;
-  color: #ffffff;
-  background-color: #909090;
-  border-color: #909090;
+  transition: background-color 0.1s, color 0.1s, border-color 0.1s;
+}
+
+div.preference button.selected {
+  background-color: #999;
+}
+
+div.preference button.contest-type-switcher:hover {
+  background-color: #aaa;
+}
+
+div.preference button.contest-type-switcher:active {
+  border-color: #bbb;
+  border: 1px solid;
 }
 
 /* local ranking */
@@ -117,6 +143,24 @@ table.local-ranking, table.local-ranking th, table.local-ranking td {
     font-size: 0.9em;
     text-align: center;
     padding: 4px 2px 4px 2px
+}
+
+table.local-ranking td.no-border {
+    font-size: 0.5em;
+    text-align: center;
+    border: none;
+    color: #999;
+}
+
+a.select-level-lower {
+  text-decoration: none;
+  color: #009;
+  cursor: pointer;
+}
+
+a.select-level-lower:hover, a.select-level-lower:active {
+  text-decoration: underline;
+  color: #009;
 }
 
 /* problem table */
