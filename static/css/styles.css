@@ -8,7 +8,7 @@ div.container {
   margin-left: auto;
   margin-right: auto;
   width: 100%;
-  max-width: 1024px;
+  max-width: 85%;
 }
 
 /* navbar */
@@ -38,7 +38,7 @@ ul.nav {
 }
 
 ul.nav li.menu {
-  margin-right: 20px;
+  margin-right: 1.5rem;
 }
 
 ul.nav li.menu:last-child {
@@ -59,24 +59,44 @@ nav.navbar a:active {
 }
 
 /* preference */
-div.preference-upper {
-  padding: 8px 8px;
-  background-color: #e0e0e0;
+div.preference {
+  position: sticky;
+  top: 3rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #fefefe;
+  color: #000;
+  height: 2.5rem;
+  padding: 0 0px;
+  border-bottom-width: 1px;
+  border-bottom-color: #eee;
+  border-bottom-style: solid;
 }
 
-div.preference-upper input.aojid {
-  height: 36px;
+div.preference ul.nav-preference {
+  padding-left: 1rem;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  margin-right: auto;
+}
+
+div.preference ul.nav-preference li.menu {
+  margin-right: 1rem;
+}
+
+div.preference ul.nav-preference li.menu:last-child {
+  margin-right: 0;
+}
+
+div.preference input.aojid {
+  height: 1.2rem;
   padding: 3px 6px;
   border-radius: .25rem;
 }
 
-div.preference-upper input.aojid {
-  height: 36px;
-  padding: 3px 6px;
-  border-radius: .25rem;
-}
-
-div.preference-upper button.contest-type-switcher {
+div.preference button.contest-type-switcher {
   cursor: pointer;
   color: #ffffff;
   background-color: #909090;

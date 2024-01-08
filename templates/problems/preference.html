@@ -1,24 +1,39 @@
-<div class="preference-upper">
-  <input class="aojid"
-         type="text"
-         placeholder="AOJ ID"
-         id="aoj_userid"
-         tabindex="66"
-         value="">
-  <input type="hidden" id="contest_type" value="0"/>
-  <button class="contest-type-switcher" type="button" id="contest_type_0">&#x1f5fe;Domestic</button>
-  <button class="contest-type-switcher" type="button" id="contest_type_1">&#x1f30f;Regional</button>
+<div class="preference">
+  <ul class="nav-preference">
+    <li class="menu">
+      <input class="aojid"
+             type="text"
+             placeholder="AOJ ID"
+             id="aoj_userid"
+             tabindex="66"
+             value="">
+      <input type="hidden" id="contest_type" value="0"/>
+    </li>
 
-  <label>
-    <input type="checkbox" id="ja" checked>&#x1f338;Japanese</input>
-  </label>
-  <label>
-    <input type="checkbox" id="en" checked>&#x1f310;English</input>
-  </label>
-  <label>
-    <input type="checkbox" id="hide_solved">Hide solved</input>
-  </label>
+    <li class="menu">
+      <button class="contest-type-switcher" type="button" id="contest_type_0">&#x1f5fe;Domestic</button>
+    </li>
+    <li class="menu">
+      <button class="contest-type-switcher" type="button" id="contest_type_1">&#x1f30f;Regional</button>
+    </li>
 
-  <input type="hidden" id="point_lower_0" value="1"/>
-  <input type="hidden" id="point_lower_1" value="1"/>
+    <li class="menu">
+      <label>
+        <input type="checkbox" id="ja" checked>&#x1f338;Japanese</input>
+      </label>
+    </li>
+    <li class="menu">
+      <label>
+        <input type="checkbox" id="en" checked>&#x1f310;English</input>
+      </label>
+    </li>
+    <li class="menu">
+      <label>
+        <input type="checkbox" id="hide_solved">Hide solved</input>
+      </label>
+    </li>
+  </ul>
 </div>
+
+<input type="hidden" id="point_lower_0" value="1"/>
+<input type="hidden" id="point_lower_1" value="1"/>
