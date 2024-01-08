@@ -12,12 +12,11 @@
   <tr>
     <td></th>
     <td>TOTAL</td>
-    <td>999990</td>
-    <td>214</td>
-    <td>14</td>
-    <td>13</td>
-    <td>12</td>
-    <td>11</td>
+    <td>{{ total_row.total_point }}</td>
+    <td>{{ total_row.total_solved }}</td>
+    {% for count in total_row.solved_counts %}
+    <td>{{ count }}</td>
+    {% endfor %}
   </tr>
   <tr>
     <td></td>

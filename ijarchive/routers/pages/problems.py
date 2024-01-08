@@ -43,8 +43,8 @@ def get_problems(request: Request,
     functions = InternalFunctions()
     context: dict[str, Any] = {}
     context["points"] = functions.get_points(contest_type)
-    problems = functions.get_problems(preference)
-    total_row = functions.get_problems_total_row(contest_type)
+    context["problems"] = functions.get_problems(preference)
+    context["total_row"] = functions.get_problems_total_row(contest_type)
 
     userids = rivals_list
     if aoj_userid:
