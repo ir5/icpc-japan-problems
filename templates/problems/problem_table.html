@@ -1,3 +1,5 @@
+{% from "problems/macros.html" import point_decor with context %}
+
 <table class="problem-table">
   <thead>
     <tr>
@@ -8,17 +10,13 @@
     </tr>
   </thead>
   <tbody>
+    {% for problem in problems %}
     <tr>
-      <td>&#x26ab;20</td>
-      <td>&#x1f90d;0</td>
-      <td>&#x1f338;&#x1f310;ICPC Score Totalizer Software</td>
-      <td>&#x1f4ca;Official 2007</td>
+      <td>{{ point_decor(points[problem.level - 1]) | trim }}{{ points[problem.level - 1] }}</td>
+      <td>&#x1f90d;{{ problem.likes }}</td>
+      <td>{% if problem.ja %}&#x1f338;{% endif %}{% if problem.en %}&#x1f310;{% endif %}{{ problem.name }}</td>
+      <td>&#x1f4ca;{{ problem.org }} {{ problem.year }}</td>
     </tr>
-    <tr>
-      <td>&#x1f535;550</td>
-      <td>&#x1f90d;5</td>
-      <td>&#x1f338;Mr. Rito Post Office</td>
-      <td>&#x1f4ca;JAG 2010</td>
-    </tr>
+    {% endfor %}
   </tbody>
 </table>
