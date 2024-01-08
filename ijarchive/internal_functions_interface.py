@@ -28,6 +28,7 @@ class ProblemInfoBase:
     level: int
     aoj_id: int
     org: str
+    year: int
     used_in: str
     slot: str
     en: bool

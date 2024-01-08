@@ -12,32 +12,37 @@ from ijarchive.internal_functions_interface import (
 class MockData:
     def __init__(self):
         self.points = {
-            0: [20, 30, 50, 80, 130, 210, 340, 550, 890, 1440, 2330, 3770, 6100, 9870],
-            1: [200, 300, 500, 800, 1300, 2100, 3400, 5500, 8900, 14400],
+            0: [20, 30, 50, 80, 130, 210, 340, 550, 890, 1440, 2330],
+            1: [200, 300, 500, 800, 1300, 2100, 3400, 5500, 8900],
         }
 
         problems = []
-        for _, level in enumerate(self.points[0], 1):
+        for level, _ in enumerate(self.points[0], 1):
             for n in range(20 - level):
                 dummy_id = 1500 + len(problems)
                 likes = random.randint(0, level)
                 problems.append(
                     ProblemInfo(
-                        0,
-                        f"Mock Domestic Problem {dummy_id}",
-                        level,
-                        dummy_id,
-                        "Official",
-                        2024,
-                        "",
-                        "X",
-                        True,
-                        True,
-                        likes,
+                        contest_type=0,
+                        name=f"Mock Domestic Problem {dummy_id}",
+                        level=level,
+                        aoj_id=dummy_id,
+                        org="Official",
+                        year=2024,
+                        used_in="",
+                        slot="X",
+                        en=True,
+                        ja=True,
+                        likes=likes,
+                        inherited_likes=0,
+                        official_editorial="",
+                        participated_teams=0,
+                        solved_teams=0,
+                        user_editorials=[],
                     )
                 )
 
-        for _, level in enumerate(self.points[1], 1):
+        for level, _ in enumerate(self.points[1], 1):
             for n in range(40 - level):
                 dummy_id = 2000 + len(problems)
                 ja = False
@@ -48,21 +53,27 @@ class MockData:
                 likes = random.randint(0, level)
                 problems.append(
                     ProblemInfo(
-                        1,
-                        f"Mock Regional Problem {dummy_id}",
-                        level,
-                        dummy_id,
-                        "Official",
-                        2024,
-                        "",
-                        "Y",
-                        ja,
-                        en,
-                        likes,
+                        contest_type=1,
+                        name=f"Mock Regional Problem {dummy_id}",
+                        level=level,
+                        aoj_id=dummy_id,
+                        org="Official",
+                        year=2024,
+                        used_in="",
+                        slot="X",
+                        en=en,
+                        ja=ja,
+                        likes=likes,
+                        inherited_likes=0,
+                        official_editorial="",
+                        participated_teams=0,
+                        solved_teams=0,
+                        user_editorials=[],
                     )
                 )
 
         self.problems = problems
+        print(self.problems)
 
         self.n_users = 20000
         self.allowed_max_ranking_retrieval = 200
@@ -126,7 +137,7 @@ class MockInternalFunctions(InterfaceInternalFunctions):
         for problem in mock_data.problems:
             if problem.contest_type != contest_type:
                 continue
-            level = problem.level - 1
+            level = problem.level
             counts[level - 1] += 1
             total_point += mock_data.points[contest_type][level - 1]
 

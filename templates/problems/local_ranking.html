@@ -1,27 +1,27 @@
+{% from "problems/macros.html" import point_decor with context %}
 <table class="local-ranking">
   <tr>
     <th>#</th>
     <th>ID</th>
     <th>POINTS</th>
     <th>SOLVED</th>
-    <th>20</th>
-    <th>30</th>
-    <th>50</th>
-    <th>80</th>
+    {% for point in points %}
+    <th>{{ point_decor(point) | trim }}{{ point }}</th>
+    {% endfor %}
   </tr>
   <tr>
-    <th></th>
-    <th>TOTAL</th>
-    <th>999990</th>
-    <th>214</th>
-    <th>14</th>
-    <th>13</th>
-    <th>12</th>
-    <th>11</th>
+    <td></th>
+    <td>TOTAL</td>
+    <td>999990</td>
+    <td>214</td>
+    <td>14</td>
+    <td>13</td>
+    <td>12</td>
+    <td>11</td>
   </tr>
   <tr>
-    <th></th>
-    <th>
+    <td></td>
+    <td>
       <label>
       &#x2795;
       <input class="aojid"
@@ -30,6 +30,6 @@
              id="rival_aoj_userid"
              value="">
       </label>
-    </th>
+    </td>
   </tr>
 </table>

@@ -94,7 +94,7 @@ table.local-ranking th, table.local-ranking td {
 }
 
 table.local-ranking, table.local-ranking th, table.local-ranking td {
-    font-size: 1.0em;
+    font-size: 0.9em;
     text-align: center;
     padding: 4px 2px 4px 2px
 }
