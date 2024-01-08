@@ -1,61 +1,61 @@
 /* common */
+body {
+  margin: 0;
+  padding: 0;
+}
+
 div.container {
   margin-left: auto;
   margin-right: auto;
-  width: 1024px;
+  width: 100%;
+  max-width: 1024px;
 }
 
 /* navbar */
-div.header-brand {
-  background-color: #ffffff;
-  padding: 0em 3em;
-  overflow: hidden;
-  text-align: center
+
+nav.navbar {
+  position: sticky;
+  top: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #333;
+  height: 3rem;
+  padding: 0 20px;
 }
 
 div.brand {
-  padding: 10px 20px 10px;
-  margin-left: -20px;
-  font-size: 40px;
-  font-weight: bold;
-  color: #303030;
-  text-shadow: 0 3px 8px #afafaf;
-  text-decoration: none;
-}
-
-ul.header-nav {
-  background-color: #606060;
   color: #ffffff;
+  font-weight: bold;
+  font-size: 1.25rem;
 }
 
 ul.nav {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  margin-right: auto; /* 右側の余白を最大化 */
 }
 
 ul.nav li.menu {
-  float: left;
+  margin-right: 20px;
 }
 
-ul.nav li.menu-right {
-  float: right;
+ul.nav li.menu:last-child {
+  margin-right: 0;
 }
 
 ul.nav li.menu a {
-  display: block;
-  color: #ffffff;
-  text-align: center;
-  font-weight: bold;
   text-decoration: none;
-  padding: 14px 16px;
-  line-height: 10px;
 }
 
-ul.nav li.menu a:hover,
-ul.nav li.menu a:active {
-  background-color: #202020;
+nav.navbar a {
+  color: #bbb;
+}
+
+nav.navbar a:hover,
+nav.navbar a:active {
+  color: #ddd;
 }
 
 /* preference */
