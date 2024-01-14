@@ -6,7 +6,7 @@
     <td class="no-border"></td>
     <td class="no-border"></td>
     {% for point in points %}
-    <td class="no-border">&#x25BC;</td>
+    <td class="no-border">{% if level_lower <= loop.index %}&#x25BC;{% endif %}</td>
     {% endfor %}
   </tr>
   <tr>
@@ -15,7 +15,7 @@
     <th>POINTS</th>
     <th>SOLVED</th>
     {% for point in points %}
-    <th><a href="#" class="select-level-lower">{{ point_decor(point) | trim }}{{ point }}</a></th>
+    <th><a href="{{ url_for('problems') }}?level_lower_{{ preference.contest_type }}={{ loop.index }}" class="select-level-lower">{{ point_decor(point) | trim }}{{ point }}</a></th>
     {% endfor %}
   </tr>
   <tr>
