@@ -2,6 +2,7 @@ import random
 from typing import Optional
 
 from ijarchive.internal_functions_interface import (
+    AOJUser,
     InterfaceInternalFunctions,
     Preference,
     ProblemInfo,
@@ -11,10 +12,10 @@ from ijarchive.internal_functions_interface import (
 
 class MockData:
     def __init__(self):
-        self.points = {
-            0: [20, 30, 50, 80, 130, 210, 340, 550, 890, 1440, 2330],
-            1: [200, 300, 500, 800, 1300, 2100, 3400, 5500, 8900],
-        }
+        self.points = [
+            [20, 30, 50, 80, 130, 210, 340, 550, 890, 1440, 2330],
+            [200, 300, 500, 800, 1300, 2100, 3400, 5500, 8900],
+        ]
 
         problems = []
         for level, _ in enumerate(self.points[0], 1):
@@ -73,7 +74,6 @@ class MockData:
                 )
 
         self.problems = problems
-        print(self.problems)
 
         self.n_users = 20000
         self.allowed_max_ranking_retrieval = 200
@@ -110,6 +110,20 @@ class MockData:
             self.ranking[contest_type] = sorted(
                 ranking, key=lambda x: -x["total_point"]
             )
+
+        problems_dict = {problem.aoj_id: problem for problem in self.problems}
+
+        n_users = 20
+        self.aoj_users: AOJUser = {}
+        for i in range(n_users):
+            aoj_userid = f"user{i}"
+            aoj_ids = set()
+            for problem in self.problems:
+                if random.randint(0, 3) == 0:
+                    aoj_ids.add(problem.aoj_id)
+
+            aoj_user = AOJUser.from_aoj_ids(aoj_userid, aoj_ids, problems_dict, self.points)
+            self.aoj_users[aoj_userid] = aoj_user
 
 
 mock_data = MockData()
@@ -163,16 +177,22 @@ class MockInternalFunctions(InterfaceInternalFunctions):
     def set_like(self, github_id: int, aoj_id: int, value: int) -> bool:
         raise NotImplementedError
 
-    def get_user_preference(self, github_id: Optional[int] = None) -> Preference:
-        raise NotImplementedError
-
-    def set_user_preference(
-        self, preference: Preference, github_id: Optional[int] = None
-    ) -> bool:
-        raise NotImplementedError
-
-    def get_user_local_ranking(self, aoj_userids: list[str]) -> list[RankingRow]:
-        raise NotImplementedError
+    def get_user_local_ranking(self, contest_type: int, aoj_userids: list[str]) -> list[RankingRow]:
+        rows: list[RankingRow] = []
+        for aoj_userid in aoj_userids:
+            if aoj_userid not in mock_data.aoj_users:
+                empty_row = RankingRow(
+                    aoj_userid=aoj_userid,
+                    total_point=0,
+                    total_solved=0,
+                    solved_counts=mock_data.points[contest_type]
+                )
+                rows.append(empty_row)
+            else:
+                user = mock_data.aoj_users[aoj_userid]
+                rows.append(user.to_ranking_row(contest_type))
+            rows = sorted(rows, key=lambda row: (row.total_point, row.aoj_userid), reverse=True)
+        return rows
 
     def get_user_solved_problems(self, aoj_userid: str) -> list[int]:
         raise NotImplementedError

@@ -27,6 +27,17 @@
     <td>{{ count }}</td>
     {% endfor %}
   </tr>
+  {% for row in local_ranking %}
+  <tr>
+    <td>&num;{{ loop.index }}</th>
+    <td>{{ row.aoj_userid }}</td>
+    <td>{{ row.total_point }}</td>
+    <td>{{ row.total_solved }}</td>
+    {% for count in row.solved_counts %}
+    <td>{{ count }}</td>
+    {% endfor %}
+  </tr>
+  {% endfor %}
   <tr>
     <td></td>
     <td>

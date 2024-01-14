@@ -50,7 +50,7 @@ def get_problems(request: Request,
     userids = rivals_list
     if aoj_userid:
         userids.append(aoj_userid)
-    # functions.get_user_local_ranking(userids)
+    context["local_ranking"] = functions.get_user_local_ranking(contest_type, userids)
 
     return templates.TemplateResponse(
         request=request, name="problems.html", context=context,
