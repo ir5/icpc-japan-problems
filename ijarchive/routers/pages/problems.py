@@ -27,7 +27,7 @@ def get_problems(request: Request,
                  rivals: Optional[str] = "",
                  ):
     level_scopes = [level_lower_0, level_lower_1]
-    rivals_list = rivals.split(",")
+    rivals_list = [rival for rival in rivals.split(",") if rival]
 
     preference = Preference(
         ja=ja,

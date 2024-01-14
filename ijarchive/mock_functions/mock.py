@@ -185,7 +185,7 @@ class MockInternalFunctions(InterfaceInternalFunctions):
                     aoj_userid=aoj_userid,
                     total_point=0,
                     total_solved=0,
-                    solved_counts=mock_data.points[contest_type]
+                    solved_counts=[0] * len(mock_data.points[contest_type])
                 )
                 rows.append(empty_row)
             else:

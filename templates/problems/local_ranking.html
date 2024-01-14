@@ -24,7 +24,7 @@
     <td>{{ total_row.total_point }}</td>
     <td>{{ total_row.total_solved }}</td>
     {% for count in total_row.solved_counts %}
-    <td>{{ count }}</td>
+    <td style="background-color: rgba(154, 213, 158);">{{ count }}</td>
     {% endfor %}
   </tr>
   {% for row in local_ranking %}
@@ -34,7 +34,7 @@
     <td>{{ row.total_point }}</td>
     <td>{{ row.total_solved }}</td>
     {% for count in row.solved_counts %}
-    <td>{{ count }}</td>
+    <td style="background-color: rgba(154, 213, 158, {{ count / total_row.solved_counts[loop.index0] }});">{{ count }}</td>
     {% endfor %}
   </tr>
   {% endfor %}
