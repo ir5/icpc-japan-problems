@@ -4,18 +4,14 @@ from typing import Optional
 
 
 @dataclass
-class LevelScope:
-    begin: int
-    end: int
-
-
-@dataclass
 class Preference:
+    ja: bool
+    en: bool
     contest_type: int
     aoj_userid: str
     rivals: list[str]
-    exclude_solved: bool
-    level_scopes: list[LevelScope]
+    hide_solved: bool
+    level_scopes: list[int]
 
 
 AOJAcceptanceInfo = dict[int, list[str]]

@@ -5,35 +5,35 @@
              type="text"
              placeholder="AOJ ID"
              id="aoj_userid"
-             tabindex="66"
-             value="">
-      <input type="hidden" id="contest_type" value="0"/>
+             value="{{ preference.aoj_userid }}">
+      <input type="hidden" id="contest_type" value="{{ preference.contest_type }}"/>
     </li>
 
     <li class="menu">
       <div class="button-container">
-        <button class="contest-type-switcher {{ 'selected' if contest_type == 0 else '' }}" type="button" id="contest_type_0">&#x1f5fe;Domestic</button>
-        <button class="contest-type-switcher {{ 'selected' if contest_type == 1 else '' }}" type="button" id="contest_type_1">&#x1f30f;Regional</button>
+        <button class="contest-type-switcher {{ 'selected' if preference.contest_type == 0 else '' }}" type="button" id="contest_type_0">&#x1f5fe;Domestic</button>
+        <button class="contest-type-switcher {{ 'selected' if preference.contest_type == 1 else '' }}" type="button" id="contest_type_1">&#x1f30f;Regional</button>
       </div>
     </li>
 
     <li class="menu">
       <label>
-        <input type="checkbox" id="ja" checked>&#x1f338;Japanese</input>
+        <input type="checkbox" id="ja" {{ 'checked' if preference.ja else '' }}>&#x1f338;Japanese</input>
       </label>
     </li>
     <li class="menu">
       <label>
-        <input type="checkbox" id="en" checked>&#x1f310;English</input>
+        <input type="checkbox" id="en" {{ 'checked' if preference.en else '' }}>&#x1f310;English</input>
       </label>
     </li>
     <li class="menu">
       <label>
-        <input type="checkbox" id="hide_solved">Hide solved</input>
+        <input type="checkbox" id="hide_solved" {{ 'checked' if preference.hide_solved else '' }}>Hide solved</input>
       </label>
     </li>
   </ul>
 </div>
 
-<input type="hidden" id="point_lower_0" value="1"/>
-<input type="hidden" id="point_lower_1" value="1"/>
+{% for c in (0, 1) %}
+<input type="hidden" id="level_lower_{{ c }}" value="{{ preference.level_scopes[c] }}"/>
+{% endfor %}

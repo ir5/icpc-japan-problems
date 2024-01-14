@@ -1,7 +1,7 @@
 function onChangePreference(redirectUrl, contestType = null) {
   let params = {}
   // values
-  for (const id of ["aoj_userid", "point_lower_0", "point_lower_1"]) {
+  for (const id of ["aoj_userid", "level_lower_0", "level_lower_1"]) {
     params[id] = document.getElementById(id).value;
   }
   // checkboxes
@@ -41,7 +41,7 @@ function onChangePreference(redirectUrl, contestType = null) {
 }
 
 function setEvents(redirectUrl) {
-  for (const id of ["ja", "en", "hide_solved", "point_lower_0", "point_lower_1"]) {
+  for (const id of ["ja", "en", "hide_solved", "level_lower_0", "level_lower_1"]) {
     let element = document.getElementById(id);
     element.addEventListener("change", function() { onChangePreference(redirectUrl); });
   }

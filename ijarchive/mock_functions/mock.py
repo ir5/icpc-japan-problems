@@ -121,14 +121,12 @@ class MockInternalFunctions(InterfaceInternalFunctions):
 
     def get_problems(self, preference: Preference) -> list[ProblemInfo]:
         contest_type = preference.contest_type
-        begin = preference.level_scopes[contest_type].begin
-        end = preference.level_scopes[contest_type].end
+        begin = preference.level_scopes[contest_type]
         return sorted([
             problem
             for problem in mock_data.problems
             if problem.contest_type == contest_type
             and problem.level >= begin
-            and problem.level <= end
         ], key=lambda problem: (-problem.year, problem.aoj_id))
 
     def get_problems_total_row(self, contest_type: int) -> RankingRow:

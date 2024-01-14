@@ -13,9 +13,9 @@
     {% for problem in problems %}
     <tr>
       <td>{{ point_decor(points[problem.level - 1]) | trim }}{{ points[problem.level - 1] }}</td>
-      <td>&#x1f90d;{{ problem.likes }}</td>
-      <td>{% if problem.ja %}&#x1f338;{% endif %}{% if problem.en %}&#x1f310;{% endif %}{{ problem.name }}</td>
-      <td>&#x1f4ca;{{ problem.org }} {{ problem.year }}</td>
+      <td><a href="#">&#x1f90d;{{ problem.likes }}</a></td>
+      <td><a href="https://onlinejudge.u-aizu.ac.jp/problems/{{ problem.aoj_id }}" target="_blank">{% if problem.ja %}&#x1f338;{% endif %}{% if problem.en %}&#x1f310;{% endif %}{{ problem.name }}</a></td>
+      <td><a href="#">&#x1f4ca;{{ problem.org }} {{ problem.year }}</a></td>
     </tr>
     {% endfor %}
   </tbody>
