@@ -1,11 +1,29 @@
 <nav class="navbar">
-  <div class="brand"><a href="{{ url_for('problems') }}">ICPC Japan Problems</a></div>
+  <div class="brand">
+    <a href="{{ url_for('problems') }}">ICPC Japan Problems</a>
+    <div class="lines-container">
+      <div class="line"></div>
+      <div class="line"></div>
+      <div class="line"></div>
+    </div>
+  </div>
   <ul class="nav">
     <li class="menu"><a href="{{ url_for('problems') }}">Problems</a></li>
     <li class="menu"><a>Ranking</a></li>
     <li class="menu"><a>About</a></li>
     <li class="menu"><a>Discord</a></li>
-    <li class="menu"><a>Links&#9660;</a></li>
+    <li class="menu">
+      <div class="dropdown">
+        <a>Links&#9660;</a>
+        <div class="dropdown-content">
+          <a target="_blank" href="https://icpc.iisf.or.jp/">ICPC Japan Official</a>
+          <a target="_blank" href="https://jag-icpc.org/">ICPC Japanese Alumni Group</a>
+          <a target="_blank" href="https://onlinejudge.u-aizu.ac.jp/">Aizu Online Judge</a>
+          <a target="_blank" href="https://kenkoooo.com/atcoder/">AtCoder Problems</a>
+          <a target="_blank" href="https://joi.goodbaton.com/">AOJ/AtCoder-JOI</a>
+        </div>
+      </div>
+    </li>
   </ul>
   <div class="nav">
     <a>Login</a>

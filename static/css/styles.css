@@ -9,6 +9,7 @@ div.container {
   margin-right: auto;
   width: 100%;
   max-width: 85%;
+  z-index: 0;
 }
 
 /* navbar */
@@ -22,6 +23,7 @@ nav.navbar {
   background-color: #333;
   height: 3rem;
   padding: 0 20px;
+  z-index: 2;
 }
 
 div.brand a {
@@ -32,11 +34,31 @@ div.brand a {
   cursor: pointer;
 }
 
+div.brand div.lines-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+div.brand div.lines-container div.line {
+  width: calc(100% / 3);
+  height: 3px;
+  background-color: #4C83C3;
+  margin: 0 2px;
+}
+
+div.brand div.lines-container div.line:nth-child(2) {
+  background-color: #FDBA12;
+}
+
+div.brand div.lines-container div.line:nth-child(3) {
+  background-color: #B22C1B;
+}
 ul.nav {
   list-style: none;
   display: flex;
   align-items: center;
-  margin-right: auto; /* 右側の余白を最大化 */
+  margin-right: auto;
 }
 
 ul.nav li.menu {
@@ -60,6 +82,31 @@ nav.navbar .nav a:active {
   color: #ddd;
 }
 
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #333;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+}
+
+.dropdown-content a {
+  float: none;
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+}
+
+.dropdown-content a:hover {
+  color: #ddd;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
 /* preference */
 div.preference {
   position: sticky;
@@ -74,6 +121,7 @@ div.preference {
   border-bottom-width: 1px;
   border-bottom-color: #eee;
   border-bottom-style: solid;
+  z-index: 1;
 }
 
 div.preference ul.nav-preference {
