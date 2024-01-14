@@ -44,14 +44,16 @@
   {% endfor %}
 </table>
 
-<label>
-  &#x2795;
-  <input class="aojid"
-         type="text"
-         placeholder="Rival's AOJ ID"
-         id="rival_aoj_userid"
-         value="">
-</label>
+<div class="rival-input">
+  <label>
+    &#x2795;
+    <input class="rival-aojid"
+           type="text"
+           placeholder="Rival's AOJ ID"
+           id="rival_aoj_userid"
+           value="">
+  </label>
+</div>
 
 {% for row in local_ranking %}
 {% if row.aoj_userid != preference.aoj_userid %}<input type="hidden" class="rival" value="{{ row.aoj_userid }}" />{% endif %}

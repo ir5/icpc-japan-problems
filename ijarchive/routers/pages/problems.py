@@ -44,13 +44,16 @@ def get_problems(request: Request,
     context["preference"] = preference
     context["level_lower"] = level_scopes[contest_type]
     context["points"] = functions.get_points(contest_type)
-    context["problems"] = functions.get_problems(preference)
     context["total_row"] = functions.get_problems_total_row(contest_type)
 
     userids = set(rivals_list)
     if aoj_userid:
         userids.add(aoj_userid)
     context["local_ranking"] = functions.get_user_local_ranking(contest_type, list(userids))
+
+    user_solved_problems = functions.get_user_solved_problems(preference.aoj_userid)
+    context["user_solved_problems"] = user_solved_problems
+    context["problems"] = functions.get_problems(preference, user_solved_problems)
 
     return templates.TemplateResponse(
         request=request, name="problems.html", context=context,

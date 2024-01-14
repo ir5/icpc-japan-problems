@@ -119,6 +119,7 @@ div.preference button.contest-type-switcher {
 }
 
 div.preference button.selected {
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
   background-color: #999;
 }
 
@@ -165,6 +166,17 @@ a:hover, a:active {
   color: #009;
 }
 
+div.rival-input {
+  padding-top: 3px;
+  padding-bottom: 6px;
+}
+
+input.rival-aojid {
+  height: 1rem;
+  padding: 3px 6px;
+  border-radius: .25rem;
+}
+
 /* problem table */
 table.problem-table {
     border-collapse: collapse;
@@ -193,7 +205,7 @@ table.problem-table td {
 }
 
 table.problem-table tr.solved {
-    background-color: #dff0d8;
+    background-color: rgb(154, 213, 158);
 }
 
 table.problem-table tr.not-archived {

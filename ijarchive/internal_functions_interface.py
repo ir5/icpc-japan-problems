@@ -93,7 +93,7 @@ class InterfaceInternalFunctions(metaclass=abc.ABCMeta):
     def get_points(self, contest_type: int) -> list[int]:
         raise NotImplementedError
 
-    def get_problems(self, preference: Preference) -> list[ProblemInfo]:
+    def get_problems(self, preference: Preference, user_solved_problems: set[int]) -> list[ProblemInfo]:
         raise NotImplementedError
 
     def get_problems_total_row(self, contest_type: int) -> RankingRow:
@@ -119,5 +119,5 @@ class InterfaceInternalFunctions(metaclass=abc.ABCMeta):
     def get_user_local_ranking(self, aoj_userids: list[str]) -> list[RankingRow]:
         raise NotImplementedError
 
-    def get_user_solved_problems(self, aoj_userid: str) -> list[int]:
+    def get_user_solved_problems(self, aoj_userid: str) -> set[int]:
         raise NotImplementedError

@@ -133,7 +133,7 @@ class MockInternalFunctions(InterfaceInternalFunctions):
     def get_points(self, contest_type: int) -> list[int]:
         return mock_data.points[contest_type]
 
-    def get_problems(self, preference: Preference) -> list[ProblemInfo]:
+    def get_problems(self, preference: Preference, user_solved_problems: set[int]) -> list[ProblemInfo]:
         contest_type = preference.contest_type
         begin = preference.level_scopes[contest_type]
         return sorted([
@@ -141,6 +141,9 @@ class MockInternalFunctions(InterfaceInternalFunctions):
             for problem in mock_data.problems
             if problem.contest_type == contest_type
             and problem.level >= begin
+            and problem.ja <= preference.ja
+            and problem.en <= preference.en
+            and not (preference.hide_solved and problem.aoj_id in user_solved_problems)
         ], key=lambda problem: (-problem.year, problem.aoj_id))
 
     def get_problems_total_row(self, contest_type: int) -> RankingRow:
@@ -194,5 +197,8 @@ class MockInternalFunctions(InterfaceInternalFunctions):
             rows = sorted(rows, key=lambda row: (row.total_point, row.aoj_userid), reverse=True)
         return rows
 
-    def get_user_solved_problems(self, aoj_userid: str) -> list[int]:
-        raise NotImplementedError
+    def get_user_solved_problems(self, aoj_userid: str) -> set[int]:
+        if aoj_userid in mock_data.aoj_users:
+            user = mock_data.aoj_users[aoj_userid]
+            return user.aoj_ids
+        return set()

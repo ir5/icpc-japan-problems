@@ -11,7 +11,7 @@
   </thead>
   <tbody>
     {% for problem in problems %}
-    <tr>
+    <tr {% if problem.aoj_id in user_solved_problems %}class="solved"{% endif %}>
       <td>{{ point_decor(points[problem.level - 1]) | trim }}{{ points[problem.level - 1] }}</td>
       <td><a href="#">&#x1f90d;{{ problem.likes }}</a></td>
       <td><a href="https://onlinejudge.u-aizu.ac.jp/problems/{{ problem.aoj_id }}" target="_blank">{% if problem.ja %}&#x1f338;{% endif %}{% if problem.en %}&#x1f310;{% endif %}{{ problem.name }}</a></td>
