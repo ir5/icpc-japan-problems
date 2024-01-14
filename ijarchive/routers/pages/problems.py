@@ -47,10 +47,10 @@ def get_problems(request: Request,
     context["problems"] = functions.get_problems(preference)
     context["total_row"] = functions.get_problems_total_row(contest_type)
 
-    userids = rivals_list
+    userids = set(rivals_list)
     if aoj_userid:
-        userids.append(aoj_userid)
-    context["local_ranking"] = functions.get_user_local_ranking(contest_type, userids)
+        userids.add(aoj_userid)
+    context["local_ranking"] = functions.get_user_local_ranking(contest_type, list(userids))
 
     return templates.TemplateResponse(
         request=request, name="problems.html", context=context,

@@ -24,10 +24,12 @@ nav.navbar {
   padding: 0 20px;
 }
 
-div.brand {
+div.brand a {
+  text-decoration: none;
   color: #ffffff;
   font-weight: bold;
   font-size: 1.25rem;
+  cursor: pointer;
 }
 
 ul.nav {
@@ -49,12 +51,12 @@ ul.nav li.menu a {
   text-decoration: none;
 }
 
-nav.navbar a {
+nav.navbar .nav a {
   color: #bbb;
 }
 
-nav.navbar a:hover,
-nav.navbar a:active {
+nav.navbar .nav a:hover,
+nav.navbar .nav a:active {
   color: #ddd;
 }
 

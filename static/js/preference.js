@@ -1,4 +1,8 @@
-function onChangePreference(redirectUrl, contestType = null) {
+function onRemoveRival(redirectUrl, rivalName) {
+  onChangePreference(redirectUrl, null, rivalName);
+}
+
+function onChangePreference(redirectUrl, contestType = null, removeRivalName = null) {
   let params = {}
   // values
   for (const id of ["aoj_userid", "level_lower_0", "level_lower_1"]) {
@@ -16,15 +20,18 @@ function onChangePreference(redirectUrl, contestType = null) {
 
   // rivals
   const rivals = document.querySelectorAll(".rival");
-  rivalNames = []
+  let rivalNames = new Set();
   for (const rivalElement of rivals) {
-    rivalNames.push(rivalElement.value);
+    rivalNames.add(rivalElement.value);
   }
   newRival = document.getElementById("rival_aoj_userid").value.trim()
   if (newRival !== "") {
-    rivalNames.push(newRival);
+    rivalNames.add(newRival);
   }
-  params["rivals"] = rivalNames.join(",");
+  if (removeRivalName !== null) {
+    rivalNames.delete(removeRivalName);
+  }
+  params["rivals"] = [...rivalNames].join(",");
 
   // compose param string
   let paramString = "";

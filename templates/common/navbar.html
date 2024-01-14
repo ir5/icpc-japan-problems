@@ -1,5 +1,5 @@
 <nav class="navbar">
-  <div class="brand">ICPC Japan Problems</div>
+  <div class="brand"><a href="{{ url_for('problems') }}">ICPC Japan Problems</a></div>
   <ul class="nav">
     <li class="menu"><a href="{{ url_for('problems') }}">Problems</a></li>
     <li class="menu"><a>Ranking</a></li>
@@ -7,5 +7,7 @@
     <li class="menu"><a>Discord</a></li>
     <li class="menu"><a>Links&#9660;</a></li>
   </ul>
-  <a>Login</a>
+  <div class="nav">
+    <a>Login</a>
+  </div>
 </nav>
