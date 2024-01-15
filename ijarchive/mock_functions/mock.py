@@ -1,4 +1,8 @@
 import random
+import os
+from typing import Optional
+
+from fastapi import Request
 
 from ijarchive.internal_functions_interface import (
     AOJUser,
@@ -6,6 +10,7 @@ from ijarchive.internal_functions_interface import (
     Preference,
     ProblemInfo,
     RankingRow,
+    GitHubLoginInfo
 )
 
 
@@ -142,6 +147,12 @@ class MockInternalFunctions(InterfaceInternalFunctions):
 
     def get_user_count(self, contest_type: int) -> int:
         raise NotImplementedError
+
+    def get_github_login_info(self, request: Request) -> Optional[GitHubLoginInfo]:
+        if os.environ.get("DUMMY_LOGIN"):
+            return GitHubLoginInfo(github_id=123, login="dummy")
+        else:
+            return None
 
     def get_likes(self, github_id: int) -> list[int]:
         return []

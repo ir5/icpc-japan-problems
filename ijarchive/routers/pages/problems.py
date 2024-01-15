@@ -73,8 +73,6 @@ def get_problems(
 
 
 def _process_request(request: Request, preference: Preference) -> Any:
-    print(preference)
-
     functions = InternalFunctions()
     context: dict[str, Any] = {}
     context["preference"] = preference
@@ -92,6 +90,7 @@ def _process_request(request: Request, preference: Preference) -> Any:
     user_solved_problems = functions.get_user_solved_problems(preference.aoj_userid)
     context["user_solved_problems"] = user_solved_problems
     context["problems"] = functions.get_problems(preference, user_solved_problems)
+    context["github_login_info"] = functions.get_github_login_info(request)
 
     response = templates.TemplateResponse(
         request=request,

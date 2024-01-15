@@ -26,6 +26,10 @@
     </li>
   </ul>
   <div class="nav">
-    <a>Login</a>
+    {% if github_login_info is none %}
+    <a href="#">Login</a>
+    {% else %}
+    <a>{{ github_login_info.login }}</a>
+    {% endif %}
   </div>
 </nav>

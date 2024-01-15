@@ -54,6 +54,7 @@ div.brand div.lines-container div.line:nth-child(2) {
 div.brand div.lines-container div.line:nth-child(3) {
   background-color: #B22C1B;
 }
+
 ul.nav {
   list-style: none;
   display: flex;
@@ -74,6 +75,7 @@ ul.nav li.menu a {
 }
 
 nav.navbar .nav a {
+  text-decoration: none;
   color: #bbb;
 }
 

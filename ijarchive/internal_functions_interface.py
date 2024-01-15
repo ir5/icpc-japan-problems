@@ -1,5 +1,8 @@
 import abc
 from dataclasses import dataclass
+from typing import Optional
+
+from fastapi import Request
 
 
 @dataclass
@@ -94,6 +97,12 @@ class AOJUser:
         )
 
 
+@dataclass
+class GitHubLoginInfo:
+    github_id: int
+    login: str
+
+
 class InterfaceInternalFunctions(metaclass=abc.ABCMeta):
     def get_points(self, contest_type: int) -> list[int]:
         raise NotImplementedError
@@ -115,6 +124,9 @@ class InterfaceInternalFunctions(metaclass=abc.ABCMeta):
         raise NotImplementedError
 
     def get_user_count(self, contest_type: int) -> int:
+        raise NotImplementedError
+
+    def get_github_login_info(self, request: Request) -> Optional[GitHubLoginInfo]:
         raise NotImplementedError
 
     def get_likes(self, github_id: int) -> list[int]:
