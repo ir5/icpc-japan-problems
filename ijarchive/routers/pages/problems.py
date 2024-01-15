@@ -1,7 +1,7 @@
-import os
-from typing import Any, Optional
 import datetime
 import json
+import os
+from typing import Any, Optional
 
 from fastapi import APIRouter, Request
 from fastapi.responses import HTMLResponse
@@ -47,7 +47,7 @@ def get_problems(
     else:
         preference = Preference(**json.loads(saved_preference_str))
 
-    def update_if_not_none(key: str, var: Any):
+    def update_if_not_none(key: str, var: Any) -> None:
         if var is not None:
             setattr(preference, key, var)
 
@@ -96,5 +96,7 @@ def _process_request(request: Request, preference: Preference) -> Any:
         context=context,
     )
     expires = datetime.datetime(2100, 1, 1, tzinfo=datetime.timezone.utc)
-    response.set_cookie(COOKIE_PREFERENCE_KEY, json.dumps(preference.__dict__), expires=expires)
+    response.set_cookie(
+        COOKIE_PREFERENCE_KEY, json.dumps(preference.__dict__), expires=expires
+    )
     return response
