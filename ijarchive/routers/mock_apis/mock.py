@@ -31,13 +31,13 @@ class MockProblemMeta:
 
 
 class MockData:
-    def __init__(self):
+    def __init__(self) -> None:
         self.points = {
             0: [20, 30, 50, 80, 130, 210, 340, 550, 890, 1440, 2330, 3770, 6100, 9870],
             1: [200, 300, 500, 800, 1300, 2100, 3400, 5500, 8900, 14400],
         }
 
-        problems = []
+        problems: list[MockProblem] = []
         for _, level in enumerate(self.points[0], 1):
             for n in range(20 - level):
                 dummy_id = 1500 + len(problems)
@@ -84,42 +84,6 @@ class MockData:
                 )
 
         self.problems = problems
-
-        self.n_users = 20000
-        self.allowed_max_ranking_retrieval = 200
-        self.ranking = {}
-        for contest_type in (0, 1):
-            ranking = []
-
-            counts = [0] * len(self.points[contest_type])
-            for problem in self.problems:
-                if problem.contest_type != contest_type:
-                    continue
-                level = problem.level - 1
-                counts[level - 1] += 1
-
-            total_point = 0
-            for i in range(self.n_users):
-                user_counts = [random.randint(0, count + 1) for count in counts]
-                total_point += sum(
-                    [
-                        user_count * point
-                        for user_count, point in zip(
-                            user_counts, self.points[contest_type]
-                        )
-                    ]
-                )
-                ranking.append(
-                    {
-                        "aoj_userid": f"user{i:05d}",
-                        "total_point": total_point,
-                        "counts": user_counts,
-                    }
-                )
-
-            self.ranking[contest_type] = sorted(
-                ranking, key=lambda x: -x["total_point"]
-            )
 
 
 mock_data = MockData()
@@ -173,15 +137,3 @@ def get_problem_metainfo(aoj_id: int) -> Any:
             [],
         )
     )
-
-
-@router.get("/api/ranking/{contest_type}")
-def get_ranking(contest_type: int, begin: int, end: int) -> Any:
-    if end - begin > mock_data.allowed_max_ranking_retrieval:
-        return []
-    return mock_data.ranking[begin - 1 : end - 1]
-
-
-@router.get("/api/ranking/{contest_type}/user_count")
-def get_ranking_user_count(contest_type: int) -> Any:
-    return len(mock_data.ranking[contest_type])

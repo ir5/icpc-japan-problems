@@ -1,6 +1,5 @@
 import abc
 from dataclasses import dataclass
-from typing import Optional
 
 
 @dataclass
@@ -58,7 +57,13 @@ class AOJUser:
     aoj_ids: set[int]
 
     @classmethod
-    def from_aoj_ids(cls, aoj_userid: str, aoj_ids: set[int], problems: dict[int, ProblemInfoBase], points: list[list[int]]):
+    def from_aoj_ids(
+        cls,
+        aoj_userid: str,
+        aoj_ids: set[int],
+        problems: dict[int, ProblemInfo],
+        points: list[list[int]],
+    ) -> "AOJUser":
         n = len(points)
         total_point = [0] * n
         total_solved = [0] * n
@@ -77,10 +82,10 @@ class AOJUser:
             total_point=total_point,
             total_solved=total_solved,
             solved_counts=solved_counts,
-            aoj_ids=aoj_ids
+            aoj_ids=aoj_ids,
         )
 
-    def to_ranking_row(self, contest_type):
+    def to_ranking_row(self, contest_type: int) -> RankingRow:
         return RankingRow(
             aoj_userid=self.aoj_userid,
             total_point=self.total_point[contest_type],
@@ -93,7 +98,9 @@ class InterfaceInternalFunctions(metaclass=abc.ABCMeta):
     def get_points(self, contest_type: int) -> list[int]:
         raise NotImplementedError
 
-    def get_problems(self, preference: Preference, user_solved_problems: set[int]) -> list[ProblemInfo]:
+    def get_problems(
+        self, preference: Preference, user_solved_problems: set[int]
+    ) -> list[ProblemInfo]:
         raise NotImplementedError
 
     def get_problems_total_row(self, contest_type: int) -> RankingRow:
@@ -107,7 +114,7 @@ class InterfaceInternalFunctions(metaclass=abc.ABCMeta):
     ) -> list[RankingRow]:
         raise NotImplementedError
 
-    def get_user_count(self, contest_type) -> int:
+    def get_user_count(self, contest_type: int) -> int:
         raise NotImplementedError
 
     def get_likes(self, github_id: int) -> list[int]:
@@ -116,7 +123,9 @@ class InterfaceInternalFunctions(metaclass=abc.ABCMeta):
     def set_like(self, github_id: int, aoj_id: int, value: int) -> bool:
         raise NotImplementedError
 
-    def get_user_local_ranking(self, aoj_userids: list[str]) -> list[RankingRow]:
+    def get_user_local_ranking(
+        self, contest_type: int, aoj_userids: list[str]
+    ) -> list[RankingRow]:
         raise NotImplementedError
 
     def get_user_solved_problems(self, aoj_userid: str) -> set[int]:

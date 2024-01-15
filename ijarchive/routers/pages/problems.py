@@ -1,5 +1,5 @@
 import os
-from typing import Optional, Any
+from typing import Any, Optional
 
 from fastapi import APIRouter, Request
 from fastapi.responses import HTMLResponse
@@ -16,19 +16,28 @@ templates = Jinja2Templates(directory="templates")
 
 
 @router.get("/", response_class=HTMLResponse, name="problems")
-def get_problems(request: Request,
-                 ja: Optional[bool] = True,
-                 en: Optional[bool] = True,
-                 hide_solved: Optional[bool] = False,
-                 level_lower_0: Optional[int] = 1,
-                 level_lower_1: Optional[int] = 1,
-                 contest_type: Optional[int] = 0,
-                 aoj_userid: Optional[str] = "",
-                 rivals: Optional[str] = "",
-                 ):
-    level_scopes = [level_lower_0, level_lower_1]
+def get_problems(
+    request: Request,
+    ja: Optional[bool] = True,
+    en: Optional[bool] = True,
+    hide_solved: Optional[bool] = False,
+    level_lower_0: Optional[int] = 1,
+    level_lower_1: Optional[int] = 1,
+    contest_type: Optional[int] = 0,
+    aoj_userid: Optional[str] = "",
+    rivals: Optional[str] = "",
+) -> Any:
+    assert level_lower_0 is not None
+    assert level_lower_1 is not None
+    level_scopes: list[int] = [level_lower_0, level_lower_1]
+    assert rivals is not None
     rivals_list = [rival for rival in rivals.split(",") if rival]
 
+    assert ja is not None
+    assert en is not None
+    assert hide_solved is not None
+    assert contest_type is not None
+    assert aoj_userid is not None
     preference = Preference(
         ja=ja,
         en=en,
@@ -36,7 +45,7 @@ def get_problems(request: Request,
         aoj_userid=aoj_userid,
         rivals=rivals_list,
         hide_solved=hide_solved,
-        level_scopes=level_scopes
+        level_scopes=level_scopes,
     )
 
     functions = InternalFunctions()
@@ -49,12 +58,16 @@ def get_problems(request: Request,
     userids = set(rivals_list)
     if aoj_userid:
         userids.add(aoj_userid)
-    context["local_ranking"] = functions.get_user_local_ranking(contest_type, list(userids))
+    context["local_ranking"] = functions.get_user_local_ranking(
+        contest_type, list(userids)
+    )
 
     user_solved_problems = functions.get_user_solved_problems(preference.aoj_userid)
     context["user_solved_problems"] = user_solved_problems
     context["problems"] = functions.get_problems(preference, user_solved_problems)
 
     return templates.TemplateResponse(
-        request=request, name="problems.html", context=context,
+        request=request,
+        name="problems.html",
+        context=context,
     )
