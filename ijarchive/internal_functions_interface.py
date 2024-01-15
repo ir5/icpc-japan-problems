@@ -6,10 +6,10 @@ from dataclasses import dataclass
 class Preference:
     ja: bool
     en: bool
+    hide_solved: bool
     contest_type: int
     aoj_userid: str
     rivals: list[str]
-    hide_solved: bool
     level_scopes: list[int]
 
 

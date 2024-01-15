@@ -1,5 +1,7 @@
 import os
 from typing import Any, Optional
+import datetime
+import json
 
 from fastapi import APIRouter, Request
 from fastapi.responses import HTMLResponse
@@ -15,59 +17,84 @@ router = APIRouter()
 templates = Jinja2Templates(directory="templates")
 
 
+COOKIE_PREFERENCE_KEY = "preference"
+
+
 @router.get("/", response_class=HTMLResponse, name="problems")
 def get_problems(
     request: Request,
-    ja: Optional[bool] = True,
-    en: Optional[bool] = True,
-    hide_solved: Optional[bool] = False,
-    level_lower_0: Optional[int] = 1,
-    level_lower_1: Optional[int] = 1,
-    contest_type: Optional[int] = 0,
-    aoj_userid: Optional[str] = "",
-    rivals: Optional[str] = "",
+    ja: Optional[bool] = None,
+    en: Optional[bool] = None,
+    hide_solved: Optional[bool] = None,
+    level_lower_0: Optional[int] = None,
+    level_lower_1: Optional[int] = None,
+    contest_type: Optional[int] = None,
+    aoj_userid: Optional[str] = None,
+    rivals: Optional[str] = None,
 ) -> Any:
-    assert level_lower_0 is not None
-    assert level_lower_1 is not None
-    level_scopes: list[int] = [level_lower_0, level_lower_1]
-    assert rivals is not None
-    rivals_list = [rival for rival in rivals.split(",") if rival]
+    saved_preference_str: Optional[str] = request.cookies.get(COOKIE_PREFERENCE_KEY)
+    if saved_preference_str is None:
+        # init with default parameters
+        preference = Preference(
+            ja=True,
+            en=True,
+            contest_type=0,
+            aoj_userid="",
+            rivals=[],
+            hide_solved=False,
+            level_scopes=[1, 1],
+        )
+    else:
+        preference = Preference(**json.loads(saved_preference_str))
 
-    assert ja is not None
-    assert en is not None
-    assert hide_solved is not None
-    assert contest_type is not None
-    assert aoj_userid is not None
-    preference = Preference(
-        ja=ja,
-        en=en,
-        contest_type=contest_type,
-        aoj_userid=aoj_userid,
-        rivals=rivals_list,
-        hide_solved=hide_solved,
-        level_scopes=level_scopes,
-    )
+    def update_if_not_none(key: str, var: Any):
+        if var is not None:
+            setattr(preference, key, var)
+
+    update_if_not_none("ja", ja)
+    update_if_not_none("en", en)
+    update_if_not_none("hide_solved", hide_solved)
+
+    if level_lower_0 is not None:
+        preference.level_scopes[0] = level_lower_0
+    if level_lower_1 is not None:
+        preference.level_scopes[1] = level_lower_1
+
+    update_if_not_none("contest_type", contest_type)
+    update_if_not_none("aoj_userid", aoj_userid)
+
+    if rivals is not None:
+        preference.rivals = [rival for rival in rivals.split(",") if rival]
+
+    return _process_request(request, preference)
+
+
+def _process_request(request: Request, preference: Preference) -> Any:
+    print(preference)
 
     functions = InternalFunctions()
     context: dict[str, Any] = {}
     context["preference"] = preference
-    context["level_lower"] = level_scopes[contest_type]
-    context["points"] = functions.get_points(contest_type)
-    context["total_row"] = functions.get_problems_total_row(contest_type)
+    context["level_lower"] = preference.level_scopes[preference.contest_type]
+    context["points"] = functions.get_points(preference.contest_type)
+    context["total_row"] = functions.get_problems_total_row(preference.contest_type)
 
-    userids = set(rivals_list)
-    if aoj_userid:
-        userids.add(aoj_userid)
+    userids = set(preference.rivals)
+    if preference.aoj_userid:
+        userids.add(preference.aoj_userid)
     context["local_ranking"] = functions.get_user_local_ranking(
-        contest_type, list(userids)
+        preference.contest_type, list(userids)
     )
 
     user_solved_problems = functions.get_user_solved_problems(preference.aoj_userid)
     context["user_solved_problems"] = user_solved_problems
     context["problems"] = functions.get_problems(preference, user_solved_problems)
 
-    return templates.TemplateResponse(
+    response = templates.TemplateResponse(
         request=request,
         name="problems.html",
         context=context,
     )
+    expires = datetime.datetime(2100, 1, 1, tzinfo=datetime.timezone.utc)
+    response.set_cookie(COOKIE_PREFERENCE_KEY, json.dumps(preference.__dict__), expires=expires)
+    return response
