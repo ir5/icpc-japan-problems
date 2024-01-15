@@ -3,7 +3,7 @@ import json
 import os
 from typing import Any, Optional
 
-from fastapi import APIRouter, Request
+from fastapi import APIRouter, Request, HTTPException
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 
@@ -65,6 +65,9 @@ def get_problems(
 
     if rivals is not None:
         preference.rivals = [rival for rival in rivals.split(",") if rival]
+
+    if preference.contest_type not in [0, 1]:
+        raise HTTPException(status_code=400)
 
     return _process_request(request, preference)
 

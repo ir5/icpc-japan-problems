@@ -14,8 +14,8 @@
     <td class="no-border"></td>
     <th>#</th>
     <th>ID</th>
-    <th>POINTS</th>
-    <th>SOLVED</th>
+    <th>Point</th>
+    <th>Solved</th>
     {% for point in points %}
     <th><a href="{{ url_for('problems') }}?level_lower_{{ preference.contest_type }}={{ loop.index }}" class="select-level-lower">{{ point_decor(point) | trim }}{{ point }}</a></th>
     {% endfor %}
