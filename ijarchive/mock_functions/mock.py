@@ -1,16 +1,16 @@
-import random
 import os
+import random
 from typing import Optional
 
 from fastapi import Request
 
 from ijarchive.internal_functions_interface import (
     AOJUser,
+    GitHubLoginInfo,
     InterfaceInternalFunctions,
     Preference,
     ProblemInfo,
     RankingRow,
-    GitHubLoginInfo
 )
 
 
