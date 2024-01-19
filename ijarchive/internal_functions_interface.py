@@ -129,10 +129,10 @@ class InterfaceInternalFunctions(metaclass=abc.ABCMeta):
     def get_github_login_info(self, request: Request) -> Optional[GitHubLoginInfo]:
         raise NotImplementedError
 
-    def get_likes(self, github_id: int) -> list[int]:
+    def get_likes(self, github_id: int) -> set[int]:
         raise NotImplementedError
 
-    def set_like(self, github_id: int, aoj_id: int, value: int) -> bool:
+    def set_like(self, github_id: int, aoj_id: int, value: int) -> int:
         raise NotImplementedError
 
     def get_user_local_ranking(

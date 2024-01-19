@@ -3,6 +3,7 @@ import os
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 
+import ijarchive.routers.apis.like as like
 import ijarchive.routers.pages.problems as problems
 
 app = FastAPI()
@@ -14,3 +15,4 @@ if os.environ.get("IJARCHIVE_USE_MOCK_API"):
     app.include_router(mock.router)
 
 app.include_router(problems.router)
+app.include_router(like.router)

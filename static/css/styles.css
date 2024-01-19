@@ -272,3 +272,7 @@ table.problem-table td.separator {
     border-left: none;
     border-right: none;
 }
+
+table.problem-table tr td a.liked {
+    color: rgb(249, 24, 128);
+}

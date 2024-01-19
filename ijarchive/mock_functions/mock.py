@@ -78,7 +78,7 @@ class MockData:
                 )
         self.problems = problems
 
-        problems_dict = {problem.aoj_id: problem for problem in self.problems}
+        self.problems_dict = {problem.aoj_id: problem for problem in self.problems}
         n_users = 20
         self.aoj_users: dict[str, AOJUser] = {}
         for i in range(n_users):
@@ -89,12 +89,13 @@ class MockData:
                     aoj_ids.add(problem.aoj_id)
 
             aoj_user = AOJUser.from_aoj_ids(
-                aoj_userid, aoj_ids, problems_dict, self.points
+                aoj_userid, aoj_ids, self.problems_dict, self.points
             )
             self.aoj_users[aoj_userid] = aoj_user
 
 
 mock_data = MockData()
+like_data: dict[int, set[int]] = {}
 
 
 class MockInternalFunctions(InterfaceInternalFunctions):
@@ -154,11 +155,20 @@ class MockInternalFunctions(InterfaceInternalFunctions):
         else:
             return None
 
-    def get_likes(self, github_id: int) -> list[int]:
-        return []
+    def get_likes(self, github_id: int) -> set[int]:
+        if github_id in like_data:
+            return like_data[github_id]
+        return set()
 
-    def set_like(self, github_id: int, aoj_id: int, value: int) -> bool:
-        raise NotImplementedError
+    def set_like(self, github_id: int, aoj_id: int, value: int) -> int:
+        if github_id not in like_data:
+            like_data[github_id] = set()
+
+        if value:
+            like_data[github_id].add(aoj_id)
+        else:
+            like_data[github_id].discard(aoj_id)
+        return mock_data.problems_dict[aoj_id].likes + value
 
     def get_user_local_ranking(
         self, contest_type: int, aoj_userids: list[str]

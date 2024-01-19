@@ -90,7 +90,14 @@ def _process_request(request: Request, preference: Preference) -> Any:
     user_solved_problems = functions.get_user_solved_problems(preference.aoj_userid)
     context["user_solved_problems"] = user_solved_problems
     context["problems"] = functions.get_problems(preference, user_solved_problems)
-    context["github_login_info"] = functions.get_github_login_info(request)
+
+    github_login_info = functions.get_github_login_info(request)
+    context["github_login_info"] = github_login_info
+
+    if github_login_info is not None:
+        context["user_likes"] = functions.get_likes(github_login_info.github_id)
+    else:
+        context["user_likes"] = set()
 
     response = templates.TemplateResponse(
         request=request,

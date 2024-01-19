@@ -9,5 +9,9 @@
 
 <script async src="{{ url_for('static', path='js/preference.js') }}"
   onload="setEvents('{{ url_for('problems') }}')"></script>
+<script>
+  const likeApiUrl = "{{ url_for('api_post_like') }}";
+</script>
+<script src="{{ url_for('static', path='js/like.js') }}"></script>
 
 {% include 'common/footer.html' %}
