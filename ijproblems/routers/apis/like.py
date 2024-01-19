@@ -2,12 +2,10 @@ from typing import Any
 
 from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import JSONResponse
-from fastapi.templating import Jinja2Templates
 
 from ijproblems.internal_functions import InternalFunctions
 
 router = APIRouter()
-templates = Jinja2Templates(directory="templates")
 
 
 @router.post("/api/user/like", response_class=JSONResponse, name="api_post_like")
