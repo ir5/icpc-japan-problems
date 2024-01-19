@@ -1,15 +1,10 @@
-import os
 from typing import Any
 
 from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import JSONResponse
 from fastapi.templating import Jinja2Templates
 
-if os.environ.get("USE_MOCK"):
-    from ijproblems.mock_functions.mock import (
-        MockInternalFunctions as InternalFunctions,
-    )
-
+from ijproblems.internal_functions import InternalFunctions
 
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
