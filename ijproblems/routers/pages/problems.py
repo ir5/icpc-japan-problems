@@ -7,10 +7,12 @@ from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 
-from ijarchive.internal_functions_interface import Preference
+from ijproblems.internal_functions_interface import Preference
 
 if os.environ.get("USE_MOCK"):
-    from ijarchive.mock_functions.mock import MockInternalFunctions as InternalFunctions
+    from ijproblems.mock_functions.mock import (
+        MockInternalFunctions as InternalFunctions,
+    )
 
 
 router = APIRouter()

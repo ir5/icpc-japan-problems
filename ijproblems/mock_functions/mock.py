@@ -4,7 +4,7 @@ from typing import Optional
 
 from fastapi import Request
 
-from ijarchive.internal_functions_interface import (
+from ijproblems.internal_functions_interface import (
     AOJUser,
     GitHubLoginInfo,
     InterfaceInternalFunctions,
