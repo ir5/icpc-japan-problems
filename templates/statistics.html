@@ -4,7 +4,7 @@
 {% from "problems/macros.html" import point_decor with context %}
 
 <div class="container">
-  <h1>Statistics (AOJ {{ problem.aoj_id }})</h1>
+  <h1>Statistics - <a href="https://onlinejudge.u-aizu.ac.jp/problems/{{ problem.aoj_id }}" target="_blank">AOJ {{ problem.aoj_id }} {{ problem.name }}</a></h1>
 
   <table class="problem-table">
     <thead>
@@ -12,6 +12,7 @@
         <th>Point</th>
         <th>Likes</th>
         <th>Problem</th>
+        <th>Statistics</th>
       </tr>
     </thead>
     <tbody>
@@ -25,6 +26,7 @@
           <input type="hidden" id="like-{{problem.aoj_id}}" value="{{ 1 if problem.aoj_id in user_likes else 0 }}">
         </td>
         <td><a href="https://onlinejudge.u-aizu.ac.jp/problems/{{ problem.aoj_id }}" target="_blank">{% if problem.ja %}&#x1f338;{% endif %}{% if problem.en %}&#x1f310;{% endif %}{{ problem.name }}</a></td>
+        <td><a href="{{ url_for('statistics', aoj_id=problem.aoj_id) }}">&#x1f4ca;{{ problem.org }} {{ problem.year }}</a></td>
       </tr>
     </tbody>
   </table>
@@ -32,10 +34,13 @@
   <h2>Contest</h2>
   {{ contest }} {{ problem.year }} - Problem {{ problem.slot }}
 
-  {% if problem.participated_teams %}
-  <h2>Acceptances in the contest</h2>
-    {{ problem.solved_teams }} acceptances / {{ problem.participated_teams }} teams
-  {% endif %}
+  <h2>Acceptances</h2>
+  <ul>
+    {% if problem.participated_teams %}
+    <li>{{ problem.solved_teams }} acceptances / {{ problem.participated_teams }} teams (in contest)</li>
+    {% endif %}
+    <li><a href="https://onlinejudge.u-aizu.ac.jp/solutions/problem/{{ problem.aoj_id }}" target="_blank">{{ problem_solved_user_count }} users</a> (in AOJ)</li>
+  </ul>
 
   {% if problem.official_editorials | length %}
   <h2>Official Editorials</h2>

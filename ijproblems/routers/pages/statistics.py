@@ -1,13 +1,11 @@
-import datetime
-import json
-from typing import Any, Optional
+from typing import Any
 
 from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 
 from ijproblems.internal_functions import InternalFunctions
-from ijproblems.internal_functions.interface import Preference
+from ijproblems.routers.utils.cookie import get_preference_from_cookie
 
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
@@ -54,9 +52,9 @@ def get_problems(
     else:
         context["user_likes"] = set()
 
-    # user_solved_problems = functions.get_user_solved_problems(preference.aoj_userid)
-    # context["user_solved_problems"] = user_solved_problems
-    context["user_solved_problems"] = set()
+    preference = get_preference_from_cookie(request)
+    user_solved_problems = functions.get_user_solved_problems(preference.aoj_userid)
+    context["user_solved_problems"] = user_solved_problems
 
     response = templates.TemplateResponse(
         request=request,
