@@ -124,14 +124,10 @@ class InterfaceInternalFunctions(metaclass=abc.ABCMeta):
     ) -> list[ProblemInfo]:
         raise NotImplementedError
 
-    def get_problem(
-        self, aoj_id: int
-    ) -> Optional[ProblemInfo]:
+    def get_problem(self, aoj_id: int) -> Optional[ProblemInfo]:
         raise NotImplementedError
 
-    def get_solved_user_count(
-        self, aoj_id: int
-    ) -> int:
+    def get_solved_user_count(self, aoj_id: int) -> int:
         raise NotImplementedError
 
     def get_problems_total_row(self, contest_type: int) -> RankingRow:

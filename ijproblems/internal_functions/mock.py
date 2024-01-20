@@ -6,12 +6,12 @@ from fastapi import Request
 
 from ijproblems.internal_functions.interface import (
     AOJUser,
+    Editorial,
     GitHubLoginInfo,
     InterfaceInternalFunctions,
     Preference,
     ProblemInfo,
     RankingRow,
-    Editorial,
 )
 
 
@@ -47,7 +47,7 @@ class MockData:
                         ja=True,
                         likes=likes,
                         inherited_likes=0,
-                        official_editorials="",
+                        official_editorials=[],
                         participated_teams=300,
                         solved_teams=120,
                         user_editorials=[],
@@ -70,6 +70,10 @@ class MockData:
                 else:
                     org = "JAG"
                     used_in = "Practice"
+                url = (
+                    "https://jag-icpc.org/?2014%2FPractice%2F%E6%98%A5%E3%82"
+                    + "%B3%E3%83%B3%E3%83%86%E3%82%B9%E3%83%88%2F%E8%AC%9B%E8%A9%95"
+                )
                 problems.append(
                     ProblemInfo(
                         contest_type=1,
@@ -84,7 +88,13 @@ class MockData:
                         ja=ja,
                         likes=likes,
                         inherited_likes=0,
-                        official_editorials=[Editorial(en=True, ja=False, url="https://jag-icpc.org/?2014%2FPractice%2F%E6%98%A5%E3%82%B3%E3%83%B3%E3%83%86%E3%82%B9%E3%83%88%2F%E8%AC%9B%E8%A9%95")],
+                        official_editorials=[
+                            Editorial(
+                                en=True,
+                                ja=False,
+                                url=url,
+                            )
+                        ],
                         participated_teams=45,
                         solved_teams=14,
                         user_editorials=[],
@@ -136,16 +146,12 @@ class MockInternalFunctions(InterfaceInternalFunctions):
             key=lambda problem: (problem.level, -problem.year, problem.aoj_id),
         )
 
-    def get_problem(
-        self, aoj_id: int
-    ) -> Optional[ProblemInfo]:
+    def get_problem(self, aoj_id: int) -> Optional[ProblemInfo]:
         if aoj_id in mock_data.problems_dict:
             return mock_data.problems_dict[aoj_id]
         return None
 
-    def get_solved_user_count(
-        self, aoj_id: int
-    ) -> int:
+    def get_solved_user_count(self, aoj_id: int) -> int:
         return 123
 
     def get_problems_total_row(self, contest_type: int) -> RankingRow:

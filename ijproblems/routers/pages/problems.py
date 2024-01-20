@@ -8,7 +8,10 @@ from fastapi.templating import Jinja2Templates
 
 from ijproblems.internal_functions import InternalFunctions
 from ijproblems.internal_functions.interface import Preference
-from ijproblems.routers.utils.cookie import get_preference_from_cookie, COOKIE_PREFERENCE_KEY
+from ijproblems.routers.utils.cookie import (
+    COOKIE_PREFERENCE_KEY,
+    get_preference_from_cookie,
+)
 
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")

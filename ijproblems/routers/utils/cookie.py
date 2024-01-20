@@ -5,7 +5,6 @@ from fastapi import Request
 
 from ijproblems.internal_functions.interface import Preference
 
-
 COOKIE_PREFERENCE_KEY = "preference"
 
 
