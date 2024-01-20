@@ -10,6 +10,16 @@
 </div>
 
 <script>
+  {% for c in [0, 1] %}
+  {
+    let element = document.getElementById("contest_type_{{ c }}");
+    element.addEventListener("click", function() {
+      window.location.href = '{{ url_for('user', aoj_userid=preference.aoj_userid, contest_type=c) }}';
+    });
+  }
+  {% endfor %}
+</script>
+<script>
   const likeApiUrl = "{{ url_for('api_post_like') }}";
 </script>
 <script src="{{ url_for('static', path='js/like.js') }}"></script>

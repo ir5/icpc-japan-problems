@@ -12,8 +12,8 @@
 
     <li class="menu">
       <div class="button-container">
-        <button class="contest-type-switcher {{ 'selected' if preference.contest_type == 0 else '' }}" onclick="window.location.href = '{{ url_for('user', aoj_userid=preference.aoj_userid, contest_type=0) }}';">&#x1f5fe;Domestic</button>
-        <button class="contest-type-switcher {{ 'selected' if preference.contest_type == 1 else '' }}" onclick="window.location.href = '{{ url_for('user', aoj_userid=preference.aoj_userid, contest_type=1) }}';">&#x1f30f;Regional</button>
+        <button class="contest-type-switcher {{ 'selected' if preference.contest_type == 0 else '' }}" id="contest_type_0">&#x1f5fe;Domestic</button>
+        <button class="contest-type-switcher {{ 'selected' if preference.contest_type == 1 else '' }}" id="contest_type_1">&#x1f30f;Regional</button>
       </div>
     </li>
 

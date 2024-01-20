@@ -1,0 +1,69 @@
+{% include 'common/header.html' %}
+{% include 'common/navbar.html' %}
+{% include 'problems/preference_user.html' %}
+
+{% from "problems/macros.html" import point_decor with context %}
+
+{% macro make_pager() -%}
+<div class="pager">
+  {% for page in pages %}
+  <a href="{{ url_for('global_ranking_page', contest_type=contest_type, page=page.page) }}" {% if page.selected %}class="selected"{% endif %}>{{page.page}}</a>
+  {% endfor %}
+</div>
+{%- endmacro %}
+
+<div class="container">
+  <h1 class="user-header">Ranking for {{ 'Domestic' if contest_type == 0 else 'Regional' }} Problems</a></h1>
+
+  {{ make_pager() }}
+
+  <table class="local-ranking">
+    <tr>
+      <td class="no-border"></td>
+      <th>#</th>
+      <th>ID</th>
+      <th>Point</th>
+      <th>Solved</th>
+      {% for point in points %}
+      <th>{{ point_decor(point) | trim }}{{ point }}</th>
+      {% endfor %}
+    </tr>
+    <tr>
+      <td class="no-border"></td>
+      <td></th>
+      <td>TOTAL</td>
+      <td>{{ total_row.total_point }}</td>
+      <td>{{ total_row.total_solved }}</td>
+      {% for count in total_row.solved_counts %}
+      <td style="background-color: rgba(154, 213, 158);">{{ count }}</td>
+      {% endfor %}
+    </tr>
+    {% for row in ranking %}
+    <tr>
+      <td class="no-border"></td>
+      <td>&num;{{ loop.index0 + rank_begin }}</th>
+      <td><a href="{{ url_for('user', aoj_userid=row.aoj_userid, contest_type=contest_type) }}">{{ row.aoj_userid }}</a></td>
+      <td>{{ row.total_point }}</td>
+      <td>{{ row.total_solved }}</td>
+      {% for count in row.solved_counts %}
+      <td style="background-color: rgba(154, 213, 158, {{ count / total_row.solved_counts[loop.index0] }});">{{ count }}</td>
+      {% endfor %}
+    </tr>
+    {% endfor %}
+  </table>
+
+  {{ make_pager() }}
+</div>
+
+<script>
+  {% for c in [0, 1] %}
+  {
+    let element = document.getElementById("contest_type_{{ c }}");
+    element.addEventListener("click", function() {
+      window.location.href = '{{ url_for('global_ranking_page', contest_type=c, page=1) }}';
+    });
+  }
+  {% endfor %}
+</script>
+
+{% include 'common/footer.html' %}

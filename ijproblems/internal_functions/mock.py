@@ -104,7 +104,7 @@ class MockData:
         self.problems = problems
 
         self.problems_dict = {problem.aoj_id: problem for problem in self.problems}
-        n_users = 20
+        n_users = 2000
         self.aoj_users: dict[str, AOJUser] = {}
         for i in range(n_users):
             aoj_userid = f"user{i}"
@@ -177,10 +177,12 @@ class MockInternalFunctions(InterfaceInternalFunctions):
     def get_global_ranking(
         self, contest_type: int, begin: int, end: int
     ) -> list[RankingRow]:
-        raise NotImplementedError
+        aoj_users = sorted([aoj_user for aoj_user in mock_data.aoj_users.values()], key=lambda aoj_user: aoj_user.total_point[contest_type], reverse=True)
+        rows = [aoj_user.to_ranking_row(contest_type) for aoj_user in aoj_users[begin - 1:end]]
+        return rows
 
     def get_user_count(self, contest_type: int) -> int:
-        raise NotImplementedError
+        return len(mock_data.aoj_users)
 
     def get_github_login_info(self, request: Request) -> Optional[GitHubLoginInfo]:
         if os.environ.get("DUMMY_LOGIN"):

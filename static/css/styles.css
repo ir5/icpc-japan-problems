@@ -281,3 +281,8 @@ table.problem-table tr td a.liked {
 div.container h1.user-header {
   margin: 0;
 }
+
+/* user page */
+div.pager a.selected {
+  font-weight: bold;
+}

@@ -50,6 +50,7 @@ def get_problems(
         context["user_likes"] = set()
 
     preference = get_preference_from_cookie(request)
+    context["preference"] = preference
     user_solved_problems = functions.get_user_solved_problems(preference.aoj_userid)
     context["user_solved_problems"] = user_solved_problems
 
