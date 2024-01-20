@@ -1,6 +1,7 @@
 {% include 'common/header.html' %}
 {% include 'common/navbar.html' %}
-{% include 'problems/preference_user.html' %}
+{% set disable_preference_form = 1 %}
+{% include 'problems/preference.html' %}
 
 <div class="container">
   <h1 class="user-header">AOJ User - <a href="https://onlinejudge.u-aizu.ac.jp/status/users/{{ preference.aoj_userid  }}" target="_blank">{{ preference.aoj_userid }}</a></h1>

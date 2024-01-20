@@ -5,7 +5,8 @@
              type="text"
              placeholder="AOJ ID"
              id="aoj_userid"
-             value="{{ preference.aoj_userid }}">
+             value="{{ preference.aoj_userid }}"
+             {% if disable_preference_form is defined %}disabled{% endif %}>
       <input type="hidden" id="contest_type" value="{{ preference.contest_type }}"/>
     </li>
 
@@ -18,17 +19,17 @@
 
     <li class="menu">
       <label>
-        <input type="checkbox" id="ja" {{ 'checked' if preference.ja else '' }}>&#x1f338;Japanese</input>
+        <input type="checkbox" id="ja" {{ 'checked' if preference.ja else '' }} {% if disable_preference_form is defined %}disabled{% endif %}>&#x1f338;Japanese</input>
       </label>
     </li>
     <li class="menu">
       <label>
-        <input type="checkbox" id="en" {{ 'checked' if preference.en else '' }}>&#x1f310;English</input>
+        <input type="checkbox" id="en" {{ 'checked' if preference.en else '' }} {% if disable_preference_form is defined %}disabled{% endif %}>&#x1f310;English</input>
       </label>
     </li>
     <li class="menu">
       <label>
-        <input type="checkbox" id="hide_solved" {{ 'checked' if preference.hide_solved else '' }}>Hide solved</input>
+        <input type="checkbox" id="hide_solved" {{ 'checked' if preference.hide_solved else '' }} {% if disable_preference_form is defined %}disabled{% endif %}>Hide solved</input>
       </label>
     </li>
   </ul>

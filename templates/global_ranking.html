@@ -1,6 +1,7 @@
 {% include 'common/header.html' %}
 {% include 'common/navbar.html' %}
-{% include 'problems/preference_user.html' %}
+{% set disable_preference_form = 1 %}
+{% include 'problems/preference.html' %}
 
 {% from "problems/macros.html" import point_decor with context %}
 
