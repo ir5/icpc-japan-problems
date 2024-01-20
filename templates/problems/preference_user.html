@@ -1,0 +1,36 @@
+<div class="preference">
+  <ul class="nav-preference">
+    <li class="menu">
+      <input class="aojid"
+             type="text"
+             placeholder="AOJ ID"
+             id="aoj_userid"
+             value="{{ preference.aoj_userid }}"
+             disabled>
+      <input type="hidden" id="contest_type" value="{{ preference.contest_type }}"/>
+    </li>
+
+    <li class="menu">
+      <div class="button-container">
+        <button class="contest-type-switcher {{ 'selected' if preference.contest_type == 0 else '' }}" onclick="window.location.href = '{{ url_for('user', aoj_userid=preference.aoj_userid, contest_type=0) }}';">&#x1f5fe;Domestic</button>
+        <button class="contest-type-switcher {{ 'selected' if preference.contest_type == 1 else '' }}" onclick="window.location.href = '{{ url_for('user', aoj_userid=preference.aoj_userid, contest_type=1) }}';">&#x1f30f;Regional</button>
+      </div>
+    </li>
+
+    <li class="menu">
+      <label>
+        <input type="checkbox" id="ja" checked disabled>&#x1f338;Japanese</input>
+      </label>
+    </li>
+    <li class="menu">
+      <label>
+        <input type="checkbox" id="en" checked disabled>&#x1f310;English</input>
+      </label>
+    </li>
+    <li class="menu">
+      <label>
+        <input type="checkbox" id="hide_solved" disabled>Hide solved</input>
+      </label>
+    </li>
+  </ul>
+</div>

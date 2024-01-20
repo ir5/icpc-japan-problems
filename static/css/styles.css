@@ -276,3 +276,8 @@ table.problem-table td.separator {
 table.problem-table tr td a.liked {
     color: rgb(249, 24, 128);
 }
+
+/* user page */
+div.container h1.user-header {
+  margin: 0;
+}

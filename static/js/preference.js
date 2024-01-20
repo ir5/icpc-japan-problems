@@ -48,7 +48,7 @@ function onChangePreference(redirectUrl, contestType = null, removeRivalName = n
 }
 
 function setEvents(redirectUrl) {
-  for (const id of ["ja", "en", "hide_solved", "level_lower_0", "level_lower_1"]) {
+  for (const id of ["ja", "en", "hide_solved"]) {
     let element = document.getElementById(id);
     element.addEventListener("change", function() { onChangePreference(redirectUrl); });
   }

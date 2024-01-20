@@ -1,0 +1,17 @@
+{% include 'common/header.html' %}
+{% include 'common/navbar.html' %}
+{% include 'problems/preference_user.html' %}
+
+<div class="container">
+  <h1 class="user-header">AOJ User - <a href="https://onlinejudge.u-aizu.ac.jp/status/users/{{ preference.aoj_userid  }}" target="_blank">{{ preference.aoj_userid }}</a></h1>
+  {% set user_page_show = 1 %}
+  {% include 'problems/local_ranking.html' %}
+  {% include 'problems/problem_table.html' %}
+</div>
+
+<script>
+  const likeApiUrl = "{{ url_for('api_post_like') }}";
+</script>
+<script src="{{ url_for('static', path='js/like.js') }}"></script>
+
+{% include 'common/footer.html' %}

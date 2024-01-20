@@ -34,7 +34,7 @@
   <tr>
     <td class="no-border">{% if row.aoj_userid != preference.aoj_userid %}<a href="javascript:void(0);" onclick="onRemoveRival('{{ url_for('problems') }}', '{{ row.aoj_userid }}')">&#x2796;</a>{% endif %}</td>
     <td>&num;{{ loop.index }}</th>
-    <td><a href="#">{{ row.aoj_userid }}</a></td>
+    <td><a href="{{ url_for('user', aoj_userid=row.aoj_userid, contest_type=preference.contest_type) }}">{{ row.aoj_userid }}</a></td>
     <td>{{ row.total_point }}</td>
     <td>{{ row.total_solved }}</td>
     {% for count in row.solved_counts %}
@@ -44,6 +44,7 @@
   {% endfor %}
 </table>
 
+{% if user_page_show is not defined %}
 <div class="rival-input">
   <label>
     &#x2795;
@@ -54,6 +55,9 @@
            value="">
   </label>
 </div>
+{% else %}
+<div style="height: 20px;"></div>
+{% endif %}
 
 {% for row in local_ranking %}
 {% if row.aoj_userid != preference.aoj_userid %}<input type="hidden" class="rival" value="{{ row.aoj_userid }}" />{% endif %}
