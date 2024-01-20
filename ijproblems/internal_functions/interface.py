@@ -1,6 +1,7 @@
 import abc
 from dataclasses import dataclass
 from typing import Optional
+from urllib.parse import unquote
 
 from fastapi import Request
 
@@ -20,6 +21,16 @@ AOJAcceptanceInfo = dict[int, list[str]]
 
 
 @dataclass
+class Editorial:
+    en: bool
+    ja: bool
+    url: str
+
+    def unquote_url(self) -> str:
+        return unquote(self.url)
+
+
+@dataclass
 class ProblemInfoBase:
     contest_type: int
     name: str
@@ -32,10 +43,11 @@ class ProblemInfoBase:
     en: bool
     ja: bool
     inherited_likes: int
-    official_editorial: str
+    official_editorials: list[Editorial]
     participated_teams: int
     solved_teams: int
-    user_editorials: list[str]
+    user_editorials: list[Editorial]
+    authors: str
 
 
 @dataclass
@@ -110,6 +122,16 @@ class InterfaceInternalFunctions(metaclass=abc.ABCMeta):
     def get_problems(
         self, preference: Preference, user_solved_problems: set[int]
     ) -> list[ProblemInfo]:
+        raise NotImplementedError
+
+    def get_problem(
+        self, aoj_id: int
+    ) -> Optional[ProblemInfo]:
+        raise NotImplementedError
+
+    def get_solved_user_count(
+        self, aoj_id: int
+    ) -> int:
         raise NotImplementedError
 
     def get_problems_total_row(self, contest_type: int) -> RankingRow:

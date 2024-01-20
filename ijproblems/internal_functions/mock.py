@@ -11,6 +11,7 @@ from ijproblems.internal_functions.interface import (
     Preference,
     ProblemInfo,
     RankingRow,
+    Editorial,
 )
 
 
@@ -26,24 +27,31 @@ class MockData:
             for n in range(20 - level):
                 dummy_id = 1500 + len(problems)
                 likes = random.randint(0, level)
+                if random.randint(0, 1) == 0:
+                    org = "Official"
+                    used_in = ""
+                else:
+                    org = "JAG"
+                    used_in = ""
                 problems.append(
                     ProblemInfo(
                         contest_type=0,
                         name=f"Mock Domestic Problem {dummy_id}",
                         level=level,
                         aoj_id=dummy_id,
-                        org="Official",
-                        year=2024,
-                        used_in="",
-                        slot="X",
+                        org=org,
+                        year=random.randint(2010, 2024),
+                        used_in=used_in,
+                        slot="ABCDEFGH"[random.randint(0, 7)],
                         en=True,
                         ja=True,
                         likes=likes,
                         inherited_likes=0,
-                        official_editorial="",
-                        participated_teams=0,
-                        solved_teams=0,
+                        official_editorials="",
+                        participated_teams=300,
+                        solved_teams=120,
                         user_editorials=[],
+                        authors="someone",
                     )
                 )
 
@@ -56,24 +64,31 @@ class MockData:
                     ja = True
                     en = False
                 likes = random.randint(0, level)
+                if random.randint(0, 2) == 0:
+                    org = "Official"
+                    used_in = ""
+                else:
+                    org = "JAG"
+                    used_in = "Practice"
                 problems.append(
                     ProblemInfo(
                         contest_type=1,
                         name=f"Mock Regional Problem {dummy_id}",
                         level=level,
                         aoj_id=dummy_id,
-                        org="Official",
-                        year=2024,
-                        used_in="",
-                        slot="X",
+                        org=org,
+                        year=random.randint(2010, 2024),
+                        used_in=used_in,
+                        slot="ABCDEFGHIJK"[random.randint(0, 10)],
                         en=en,
                         ja=ja,
                         likes=likes,
                         inherited_likes=0,
-                        official_editorial="",
-                        participated_teams=0,
-                        solved_teams=0,
+                        official_editorials=[Editorial(en=True, ja=False, url="https://jag-icpc.org/?2014%2FPractice%2F%E6%98%A5%E3%82%B3%E3%83%B3%E3%83%86%E3%82%B9%E3%83%88%2F%E8%AC%9B%E8%A9%95")],
+                        participated_teams=45,
+                        solved_teams=14,
                         user_editorials=[],
+                        authors="someone",
                     )
                 )
         self.problems = problems
@@ -118,8 +133,20 @@ class MockInternalFunctions(InterfaceInternalFunctions):
                     preference.hide_solved and problem.aoj_id in user_solved_problems
                 )
             ],
-            key=lambda problem: (-problem.year, problem.aoj_id),
+            key=lambda problem: (problem.level, -problem.year, problem.aoj_id),
         )
+
+    def get_problem(
+        self, aoj_id: int
+    ) -> Optional[ProblemInfo]:
+        if aoj_id in mock_data.problems_dict:
+            return mock_data.problems_dict[aoj_id]
+        return None
+
+    def get_solved_user_count(
+        self, aoj_id: int
+    ) -> int:
+        return 123
 
     def get_problems_total_row(self, contest_type: int) -> RankingRow:
         counts = [0] * len(mock_data.points[contest_type])
