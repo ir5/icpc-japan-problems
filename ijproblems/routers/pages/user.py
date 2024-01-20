@@ -5,19 +5,18 @@ from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 
 from ijproblems.internal_functions import InternalFunctions
-from ijproblems.routers.utils.cookie import get_preference_from_cookie
 from ijproblems.internal_functions.interface import Preference
 
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
 
 
-@router.get("/user/{aoj_userid}/{contest_type}", response_class=HTMLResponse, name="user")
-def get_problems(
-    request: Request,
-    aoj_userid: str,
-    contest_type: int
-) -> Any:
+@router.get(
+    "/user/{aoj_userid}/{contest_type}", response_class=HTMLResponse, name="user"
+)
+def get_problems(request: Request, aoj_userid: str, contest_type: int) -> Any:
+    if contest_type not in [0, 1]:
+        raise HTTPException(status_code=400)
     functions = InternalFunctions()
     context: dict[str, Any] = {}
 
