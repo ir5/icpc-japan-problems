@@ -11,9 +11,6 @@ router = APIRouter()
 templates = Jinja2Templates(directory="templates")
 
 
-COOKIE_PREFERENCE_KEY = "preference"
-
-
 @router.get("/problem/{aoj_id}", response_class=HTMLResponse, name="statistics")
 def get_problems(
     request: Request,
