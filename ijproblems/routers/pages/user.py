@@ -4,6 +4,7 @@ from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 
+from ijproblems.internal_functions.github_app_client_id import GITHUB_APP_CLIENT_ID
 from ijproblems.internal_functions import InternalFunctions
 from ijproblems.internal_functions.interface import Preference
 
@@ -45,6 +46,7 @@ def get_problems(request: Request, aoj_userid: str, contest_type: int) -> Any:
 
     github_login_info = functions.get_github_login_info(request)
     context["github_login_info"] = github_login_info
+    context["github_app_client_id"] = GITHUB_APP_CLIENT_ID
 
     if github_login_info is not None:
         context["user_likes"] = functions.get_likes(github_login_info.github_id)

@@ -27,7 +27,7 @@
   </ul>
   <div class="nav">
     {% if github_login_info is none %}
-    <a href="#">Login</a>
+    <a href="https://github.com/login/oauth/authorize?client_id={{ github_app_client_id }}&redirect_uri={{ url_for('global_ranking') | urlencode | replace('/', '%2F') }}">Login</a>
     {% else %}
     <a>Account({{ github_login_info.login }})</a>
     {% endif %}

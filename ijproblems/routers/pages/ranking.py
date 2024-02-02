@@ -5,6 +5,7 @@ from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 
+from ijproblems.internal_functions.github_app_client_id import GITHUB_APP_CLIENT_ID
 from ijproblems.internal_functions import InternalFunctions
 from ijproblems.routers.utils.cookie import (
     get_preference_from_cookie,
@@ -60,6 +61,7 @@ def get_global_ranking_page(
 
     github_login_info = functions.get_github_login_info(request)
     context["github_login_info"] = github_login_info
+    context["github_app_client_id"] = GITHUB_APP_CLIENT_ID
 
     response = templates.TemplateResponse(
         request=request,
