@@ -188,7 +188,11 @@ class MockInternalFunctions(InterfaceInternalFunctions):
         if os.environ.get("DUMMY_LOGIN"):
             return GitHubLoginInfo(github_id=123, login="dummy")
         else:
-            return None
+            session = request.session
+            if "github_id" in session and "github_login" in session:
+                return GitHubLoginInfo(github_id=session["github_id"], login=session["github_login"])
+            else:
+                return None
 
     def get_likes(self, github_id: int) -> set[int]:
         if github_id in like_data:
