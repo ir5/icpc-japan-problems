@@ -1,5 +1,5 @@
-"fastapi[all]"="*"
-psycopg="*"
-Jinja2="*"
-requests="*"
-"uvicorn[standard]"="*"
+fastapi[all]
+psycopg
+Jinja2
+requests
+uvicorn[standard]
