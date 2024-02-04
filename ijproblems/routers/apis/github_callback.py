@@ -1,16 +1,21 @@
 from typing import Any
 
+import requests
+import starlette.status as status
 from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import RedirectResponse
-import starlette.status as status
-import requests
 
-from ijproblems.internal_functions.github_app import GITHUB_APP_CLIENT_ID, GITHUB_APP_CLIENT_SECRET
+from ijproblems.internal_functions.github_app import (
+    GITHUB_APP_CLIENT_ID,
+    GITHUB_APP_CLIENT_SECRET,
+)
 
 router = APIRouter()
 
 
-@router.get("/api/github/callback", response_class=RedirectResponse, name="github_callback")
+@router.get(
+    "/api/github/callback", response_class=RedirectResponse, name="github_callback"
+)
 def github_callback(request: Request, code: str) -> Any:
     data = {
         "client_id": GITHUB_APP_CLIENT_ID,
@@ -31,10 +36,7 @@ def github_callback(request: Request, code: str) -> Any:
         raise HTTPException(status_code=401, detail="response from oauth is broken")
 
     user_uri = "https://api.github.com/user"
-    headers = {
-        "Authorization": f"Bearer {token}",
-        "Accept": "application/json"
-    }
+    headers = {"Authorization": f"Bearer {token}", "Accept": "application/json"}
     response = requests.get(user_uri, headers=headers)
 
     if response.status_code != 200:

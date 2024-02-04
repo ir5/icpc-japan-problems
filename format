@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 shopt -s globstar
-pipenv run black **/*.py
-pipenv run isort **/*.py --profile black
-pipenv run flake8 **/*.py
-pipenv run mypy **/*.py
+black **/*.py
+isort **/*.py --profile black
+flake8 **/*.py
+mypy **/*.py

@@ -4,8 +4,8 @@ from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 
-from ijproblems.internal_functions.github_app import GITHUB_APP_CLIENT_ID
 from ijproblems.internal_functions import InternalFunctions
+from ijproblems.internal_functions.github_app import GITHUB_APP_CLIENT_ID
 from ijproblems.routers.utils.cookie import get_preference_from_cookie
 
 router = APIRouter()

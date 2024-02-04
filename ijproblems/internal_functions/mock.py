@@ -24,7 +24,7 @@ class MockData:
 
         problems: list[ProblemInfo] = []
         for level, _ in enumerate(self.points[0], 1):
-            for n in range(20 - level):
+            for _n in range(20 - level):
                 dummy_id = 1500 + len(problems)
                 likes = random.randint(0, level)
                 if random.randint(0, 1) == 0:
@@ -56,7 +56,7 @@ class MockData:
                 )
 
         for level, _ in enumerate(self.points[1], 1):
-            for n in range(40 - level):
+            for _n in range(40 - level):
                 dummy_id = 2000 + len(problems)
                 ja = False
                 en = True
@@ -177,8 +177,15 @@ class MockInternalFunctions(InterfaceInternalFunctions):
     def get_global_ranking(
         self, contest_type: int, begin: int, end: int
     ) -> list[RankingRow]:
-        aoj_users = sorted([aoj_user for aoj_user in mock_data.aoj_users.values()], key=lambda aoj_user: aoj_user.total_point[contest_type], reverse=True)
-        rows = [aoj_user.to_ranking_row(contest_type) for aoj_user in aoj_users[begin - 1:end]]
+        aoj_users = sorted(
+            [aoj_user for aoj_user in mock_data.aoj_users.values()],
+            key=lambda aoj_user: aoj_user.total_point[contest_type],
+            reverse=True,
+        )
+        rows = [
+            aoj_user.to_ranking_row(contest_type)
+            for aoj_user in aoj_users[begin - 1 : end]
+        ]
         return rows
 
     def get_user_count(self, contest_type: int) -> int:
@@ -190,7 +197,9 @@ class MockInternalFunctions(InterfaceInternalFunctions):
         else:
             session = request.session
             if "github_id" in session and "github_login" in session:
-                return GitHubLoginInfo(github_id=session["github_id"], login=session["github_login"])
+                return GitHubLoginInfo(
+                    github_id=session["github_id"], login=session["github_login"]
+                )
             else:
                 return None
 

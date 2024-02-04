@@ -1,4 +1,5 @@
 import abc
+from abc import abstractmethod
 from dataclasses import dataclass
 from typing import Optional
 from urllib.parse import unquote
@@ -116,47 +117,60 @@ class GitHubLoginInfo:
 
 
 class InterfaceInternalFunctions(metaclass=abc.ABCMeta):
+    @abstractmethod
     def get_points(self, contest_type: int) -> list[int]:
         raise NotImplementedError
 
+    @abstractmethod
     def get_problems(
         self, preference: Preference, user_solved_problems: set[int]
     ) -> list[ProblemInfo]:
         raise NotImplementedError
 
+    @abstractmethod
     def get_problem(self, aoj_id: int) -> Optional[ProblemInfo]:
         raise NotImplementedError
 
+    @abstractmethod
     def get_solved_user_count(self, aoj_id: int) -> int:
         raise NotImplementedError
 
+    @abstractmethod
     def get_problems_total_row(self, contest_type: int) -> RankingRow:
         raise NotImplementedError
 
+    @abstractmethod
     def get_problem_acceptance_count(self, aoj_id: int) -> int:
         raise NotImplementedError
 
+    @abstractmethod
     def get_global_ranking(
         self, contest_type: int, begin: int, end: int
     ) -> list[RankingRow]:
         raise NotImplementedError
 
+    @abstractmethod
     def get_user_count(self, contest_type: int) -> int:
         raise NotImplementedError
 
+    @abstractmethod
     def get_github_login_info(self, request: Request) -> Optional[GitHubLoginInfo]:
         raise NotImplementedError
 
+    @abstractmethod
     def get_likes(self, github_id: int) -> set[int]:
         raise NotImplementedError
 
+    @abstractmethod
     def set_like(self, github_id: int, aoj_id: int, value: int) -> int:
         raise NotImplementedError
 
+    @abstractmethod
     def get_user_local_ranking(
         self, contest_type: int, aoj_userids: list[str]
     ) -> list[RankingRow]:
         raise NotImplementedError
 
+    @abstractmethod
     def get_user_solved_problems(self, aoj_userid: str) -> set[int]:
         raise NotImplementedError
