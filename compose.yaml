@@ -1,9 +1,9 @@
 services:
-  api:
+  server:
     image: ijproblems
     build:
       dockerfile: ./Dockerfile
-    container_name: ijproblems
+    container_name: ijproblems-server
     environment:
       FASTAPI_PORT: 8000
       FASTAPI_HOST: 0.0.0.0
@@ -14,4 +14,31 @@ services:
       - "8000:8000"
     volumes:
       - .:/app
+    restart: "no"
+
+  postgres:
+    image: postgres:16.1
+    container_name: ijproblems-postgres
+    environment:
+      POSTGRES_USER:
+      POSTGRES_PASSWORD:
+      POSTGRES_DB:
+    hostname: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - .postgres-data:/var/lib/postgresql/data
+    restart: "no"
+
+  pgadmin4:
+    image: dpage/pgadmin4:7.8
+    container_name: ijproblems-pgadmin4
+    ports:
+      - "8080:80"
+    volumes:
+      - .pgadmin:/var/lib/pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: postgres@example.com
+      PGADMIN_DEFAULT_PASSWORD: postgres
+    hostname: pgadmin4
     restart: "no"
