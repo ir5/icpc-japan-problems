@@ -24,7 +24,9 @@ app.include_router(ranking.router)
 secret = os.environ.get("SESSION_SECRET", "ija")
 app.add_middleware(SessionMiddleware, secret_key=secret)
 
+
 if __name__ == "__main__":
-    port = os.environ.get("FASTAPI_PORT", 5000)
-    reload = os.environ.get("FASTAPI_RELOAD", True)
-    uvicorn.run("main:app", port=port, log_level="info", reload=reload)
+    port = int(os.environ.get("FASTAPI_PORT"))
+    host = os.environ.get("FASTAPI_HOST")
+    reload = bool(os.environ.get("FASTAPI_RELOAD"))
+    uvicorn.run("main:app", host=host, port=port, log_level="info", reload=reload)

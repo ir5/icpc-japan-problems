@@ -1,0 +1,17 @@
+services:
+  api:
+    image: ijproblems
+    build:
+      dockerfile: ./Dockerfile
+    container_name: ijproblems
+    environment:
+      FASTAPI_PORT: 8000
+      FASTAPI_HOST: 0.0.0.0
+      FASTAPI_RELOAD: 1
+      USE_MOCK:
+      DUMMY_LOGIN:
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    restart: "no"
