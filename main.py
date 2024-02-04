@@ -2,6 +2,7 @@ import os
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from starlette.middleware.sessions import SessionMiddleware
+import uvicorn
 
 import ijproblems.routers.apis.like as like
 import ijproblems.routers.apis.github_callback as github_callback
@@ -22,3 +23,8 @@ app.include_router(ranking.router)
 
 secret = os.environ.get("SESSION_SECRET", "ija")
 app.add_middleware(SessionMiddleware, secret_key=secret)
+
+if __name__ == "__main__":
+    port = os.environ.get("FASTAPI_PORT", 5000)
+    reload = os.environ.get("FASTAPI_RELOAD", True)
+    uvicorn.run("main:app", port=port, log_level="info", reload=reload)
