@@ -28,6 +28,7 @@ services:
       - "5432:5432"
     volumes:
       - .postgres-data:/var/lib/postgresql/data
+      - ./sql:/sql
     restart: "no"
 
   pgadmin4:
@@ -41,4 +42,15 @@ services:
       PGADMIN_DEFAULT_EMAIL: postgres@example.com
       PGADMIN_DEFAULT_PASSWORD: postgres
     hostname: pgadmin4
+    restart: "no"
+
+  admin:
+    image: ijproblems-admin
+    build:
+      dockerfile: ./admin/Dockerfile
+    container_name: ijproblems-admin
+    volumes:
+      - ./admin:/admin
+    stdin_open: true
+    tty: true
     restart: "no"
