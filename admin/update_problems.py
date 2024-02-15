@@ -5,12 +5,15 @@ and recalculate the points if necessary.
 
 import argparse
 import csv
-import dataclass
+import dataclasses
+from dataclasses import dataclass
+from io import StringIO
 import json
 import os
 from typing import Any
 
 import psycopg
+from psycopg.rows import class_row
 import requests
 
 
@@ -24,39 +27,58 @@ class ProblemRow:
     year: int
     used_in: str
     slot: str
-    en: bool
-    ja: bool
-    inherited_likes: int = 0
+    en: int
+    ja: int
+    inherited_likes: int
     meta: str
+
+    def __post_init__(self):
+        for field in dataclasses.fields(self):
+            value = getattr(self, field.name)
+            setattr(self, field.name, field.type(value))
+
+
+def perf_to_level(perf: int, contest_type: int) -> int:
+    if contest_type == 0:
+        uppers = [7, 17, 27, 37, 47, 57, 67, 77, 87, 97, 100]
+    else:
+        uppers = [7, 17, 27, 37, 47, 57, 67, 77, 100]
+
+    for level, upper in enumerate(uppers, 1):
+        if perf <= upper:
+            return level
 
 
 def main(conn: psycopg.Connection) -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("sheet_name")
-    args = parser.parse()
+    args = parser.parse_args()
 
     # retrieve all problems in the table
 
-    with conn.cursor(row_factory=ProblemRow) as cursor:
+    with conn.cursor(row_factory=class_row(ProblemRow)) as cursor:
         problems = cursor.execute(
-            "SELECT (problem_id, name, contest_type,"
-            "level, org, used_in, slot, en, ja, inherited_likes, meta) FROM problems"
+            "SELECT problem_id, name, contest_type,"
+            "level, org, year, used_in, slot, en, ja, inherited_likes, meta FROM problems"
         ).fetchall()
     problems_dict = {problem.problem_id: problem for problem in problems}
 
-    sheet_id = os.environ("ADMIN_SHEET_ID", "")
+    sheet_id = os.environ.get("ADMIN_SHEET_ID", "")
     sheet_name = args.sheet_name
     url = f"https://docs.google.com/spreadsheets/d/{sheet_id}/gviz/tq?tqx=out:csv&sheet={sheet_name}"
     response = requests.get(url)
 
-    if response.code != 200:
+    print(response)
+    if response.status_code != 200:
         raise RuntimeError(f"response: {response}")
+    for row in csv.DictReader(StringIO(response.text)):
+        print(row)
 
     need_recalculation = False
     create_problems: ProblemRow = []
     update_problems: ProblemRow = []
 
-    for row in csv.DictReader(response.text):
+    for row in csv.DictReader(StringIO(response.text)):
         if row["problem_id"] == "":
             continue
 
@@ -65,25 +87,35 @@ def main(conn: psycopg.Connection) -> None:
             if key in row and row[key] != "":
                 meta[key] = castto(row[key])
 
+        editorials = []
         for key in ("official_editorial_en", "official_editorial_ja"):
             if key in row and row[key] != "":
-                meta[key] = {
+                editorials.append({
                     "en": key.endswith("en"),
                     "ja": key.endswith("ja"),
                     "url": row[key]
-                }
+                })
 
         for key in ("user_editorial1", "user_editorial2"):
-            if key in row:
-                meta[key] = {
+            if key in row and row[key] != "":
+                editorials.append({
                     "en": False,
                     "ja": True,
                     "url": row[key]
-                }
+                })
+        meta["editorials"] = editorials
         row["meta"] = json.dumps(meta, sort_keys=True)
+
+        if len(row["inherited_likes"]) == 0:
+            row["inherited_likes"] = 0
+        perf = int(row["perf_final"])
+        contest_type = int(row["contest_type"])
+        level = perf_to_level(perf, contest_type)
+        row["level"] = level
 
         problem = ProblemRow(**{key: row[key] for key in ProblemRow.__match_args__})
         problem_id = problem.problem_id
+        print(problem)
 
         if problem_id in problems_dict:
             current = problems_dict[problem_id]
@@ -118,23 +150,25 @@ def main(conn: psycopg.Connection) -> None:
 
     with conn.cursor() as cursor:
         for problem in update_problems:
+            print(dataclasses.asdict(problem))
             cursor.execute(
                 (
-                    "UPDATE problems"
+                    "UPDATE problems "
                     "SET "
-                    "name=%(name), "
-                    "contest_type=%(contest_type), "
-                    "level=%(level), "
-                    "org=%(org), "
-                    "used_in=%(used_in), "
-                    "slot=%(slot), "
-                    "ja=%(ja), "
-                    "en=%(en), "
-                    "inherited_likes=%(inherited_likes), "
-                    "meta=%(meta), "
-                    "WHERE problem_id=%(problem_id);"
+                    "name=%(name)s, "
+                    "contest_type=%(contest_type)s, "
+                    "level=%(level)s, "
+                    "org=%(org)s, "
+                    "year=%(year)s, "
+                    "used_in=%(used_in)s, "
+                    "slot=%(slot)s, "
+                    "ja=%(ja)s, "
+                    "en=%(en)s, "
+                    "inherited_likes=%(inherited_likes)s, "
+                    "meta=%(meta)s "
+                    "WHERE problem_id=%(problem_id)s;"
                 ),
-                dataclass.asdict(problem)
+                dataclasses.asdict(problem)
             )
 
         for problem in create_problems:
@@ -146,6 +180,7 @@ def main(conn: psycopg.Connection) -> None:
                     "contest_type, "
                     "level, "
                     "org, "
+                    "year, "
                     "used_in, "
                     "slot, "
                     "ja, "
@@ -153,19 +188,20 @@ def main(conn: psycopg.Connection) -> None:
                     "inherited_likes, "
                     "meta) "
                     "VALUES "
-                    "(%(problem_id), "
-                    "%(name), "
-                    "%(contest_type), "
-                    "%(level), "
-                    "%(org), "
-                    "%(used_in), "
-                    "%(slot), "
-                    "%(ja), "
-                    "%(en), "
-                    "%(inherited_likes), "
-                    "%(meta)"
+                    "(%(problem_id)s, "
+                    "%(name)s, "
+                    "%(contest_type)s, "
+                    "%(level)s, "
+                    "%(org)s, "
+                    "%(year)s, "
+                    "%(used_in)s, "
+                    "%(slot)s, "
+                    "%(ja)s, "
+                    "%(en)s, "
+                    "%(inherited_likes)s, "
+                    "%(meta)s)"
                 ),
-                dataclass.asdict(problem)
+                dataclasses.asdict(problem)
             )
 
 
@@ -175,7 +211,7 @@ if __name__ == "__main__":
     hostname = "postgres"
     port = 5432
     dbname = os.environ["POSTGRES_DB"]
-    url = "postgres://user:password@hostname:port/dbname"
+    url = f"postgres://{user}:{password}@{hostname}:{port}/{dbname}"
 
     with psycopg.connect(url) as conn:
         main(conn)

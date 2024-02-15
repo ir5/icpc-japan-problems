@@ -49,6 +49,11 @@ services:
     build:
       dockerfile: ./admin/Dockerfile
     container_name: ijproblems-admin
+    environment:
+      POSTGRES_USER:
+      POSTGRES_PASSWORD:
+      POSTGRES_DB:
+      ADMIN_SHEET_ID:
     volumes:
       - ./admin:/admin
     stdin_open: true
