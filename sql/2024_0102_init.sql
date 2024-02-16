@@ -21,7 +21,6 @@ CREATE TABLE problems (
   meta         TEXT NOT NULL,
   PRIMARY KEY (problem_id)
 );
-CREATE INDEX ON problems (problem_id);
 
 CREATE TABLE user_points (
   aoj_userid        VARCHAR(64) NOT NULL,
@@ -29,14 +28,12 @@ CREATE TABLE user_points (
   counts_per_levels VARCHAR(255) NOT NULL,
   PRIMARY KEY (aoj_userid)
 );
-CREATE INDEX ON user_points (aoj_userid);
 CREATE INDEX ON user_points (total DESC);
 
 CREATE TABLE likes (
   github_id   BIGINT NOT NULL,
   problem_id  INTEGER NOT NULL,
-  weight      INTEGER NOT NULL DEFAULT 1,
-  PRIMARY KEY (github_id)
+  PRIMARY KEY (github_id, problem_id)
 );
 CREATE INDEX ON likes (problem_id);
 
