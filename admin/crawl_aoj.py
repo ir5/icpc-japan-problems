@@ -2,7 +2,6 @@ import time
 
 import psycopg
 import requests
-
 from ijproblems_admin.database import get_postgres_url, insert_aoj_aceptance
 
 
@@ -13,7 +12,7 @@ def get_problem_ids(conn: psycopg.Connection) -> list[int]:
         return problem_ids
 
 
-def main(conn):
+def main(conn) -> None:
     craw_interval_second = 60
 
     problem_ids: list[int] = []
@@ -46,9 +45,7 @@ def main(conn):
         # crawl for latest status
         time.sleep(5)
         current_problem_ids = set(get_problem_ids(conn))
-        url = (
-            "https://judgeapi.u-aizu.ac.jp/solutions"
-        )
+        url = "https://judgeapi.u-aizu.ac.jp/solutions"
         response = requests.get(url)
         if response.status_code != 200:
             time.sleep(5)

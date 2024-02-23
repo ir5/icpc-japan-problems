@@ -1,7 +1,7 @@
 from typing import Optional
 
-from fastapi import Request
 import psycopg
+from fastapi import Request
 
 from ijproblems.internal_functions.interface import (
     AOJUser,
@@ -15,7 +15,7 @@ from ijproblems.internal_functions.interface import (
 from ijproblems.internal_functions.points import POINTS
 
 
-class InternalFunctions(InterfaceInternalFunctions):
+class ImplInternalFunctions(InterfaceInternalFunctions):
 
     def __init__(self, conn: psycopg.Connection) -> None:
         self.conn = conn

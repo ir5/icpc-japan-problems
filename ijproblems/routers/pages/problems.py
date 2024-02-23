@@ -2,7 +2,8 @@ import datetime
 import json
 from typing import Any, Optional
 
-from fastapi import APIRouter, HTTPException, Request
+import psycopg
+from fastapi import APIRouter, Depends, HTTPException, Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 
@@ -13,6 +14,7 @@ from ijproblems.routers.utils.cookie import (
     COOKIE_PREFERENCE_KEY,
     get_preference_from_cookie,
 )
+from ijproblems.routers.utils.database import get_db_conn
 
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
@@ -29,6 +31,7 @@ def get_problems(
     contest_type: Optional[int] = None,
     aoj_userid: Optional[str] = None,
     rivals: Optional[str] = None,
+    conn: psycopg.Connection = Depends(get_db_conn),
 ) -> Any:
     preference = get_preference_from_cookie(request)
 
@@ -54,11 +57,13 @@ def get_problems(
     if preference.contest_type not in [0, 1]:
         raise HTTPException(status_code=400)
 
-    return _process_request(request, preference)
+    return _process_request(request, preference, conn)
 
 
-def _process_request(request: Request, preference: Preference) -> Any:
-    functions = InternalFunctions()
+def _process_request(
+    request: Request, preference: Preference, conn: psycopg.Connection
+) -> Any:
+    functions = InternalFunctions(conn)
     context: dict[str, Any] = {}
     context["preference"] = preference
     context["level_lower"] = preference.level_scopes[preference.contest_type]

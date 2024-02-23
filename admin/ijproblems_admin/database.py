@@ -1,4 +1,5 @@
 import os
+
 import psycopg
 
 
@@ -12,7 +13,9 @@ def get_postgres_url() -> str:
     return url
 
 
-def insert_aoj_aceptance(cursor: psycopg.Cursor, aoj_userid: str, problem_id: int) -> None:
+def insert_aoj_aceptance(
+    cursor: psycopg.Cursor, aoj_userid: str, problem_id: int
+) -> None:
     sql = (
         "INSERT INTO aoj_acceptances (aoj_userid, problem_id) "
         "VALUES (%s, %s) "

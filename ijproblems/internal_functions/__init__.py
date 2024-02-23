@@ -6,5 +6,5 @@ if os.environ.get("USE_MOCK"):
     )
 else:
     from ijproblems.internal_functions.impl import (  # noqa
-        InternalFunctions
+        ImplInternalFunctions as InternalFunctions,
     )

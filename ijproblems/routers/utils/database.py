@@ -1,5 +1,7 @@
 import os
+from typing import Generator
 
+import psycopg
 from psycopg_pool import ConnectionPool
 
 
@@ -16,7 +18,7 @@ def get_postgres_url() -> str:
 _pool = ConnectionPool(get_postgres_url())
 
 
-def get_db_conn():
+def get_db_conn() -> Generator[psycopg.Connection, None, None]:
     conn = _pool.getconn()
     try:
         yield conn
