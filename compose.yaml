@@ -12,8 +12,11 @@ services:
       DUMMY_LOGIN:
     ports:
       - "8000:8000"
-    volumes:
-      - .:/app
+      # volumes:
+      # - ./ijproblems:/app/ijproblems
+      # - ./static:/app/static
+      # - ./templates:/app/templates
+      # - ./main.py:/app/.
     restart: "no"
 
   postgres:

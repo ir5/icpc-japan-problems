@@ -1,5 +1,5 @@
 fastapi[all]
-psycopg
+psycopg[pool]
 Jinja2
 requests
 uvicorn[standard]

@@ -1,8 +1,7 @@
-import os
-import random
-from typing import Any, Optional
+from typing import Optional
 
 from fastapi import Request
+import psycopg
 
 from ijproblems.internal_functions.interface import (
     AOJUser,
@@ -16,118 +15,13 @@ from ijproblems.internal_functions.interface import (
 from ijproblems.internal_functions.points import POINTS
 
 
-class MockData:
-    def __init__(self) -> None:
-        self.points = POINTS
+class InternalFunctions(InterfaceInternalFunctions):
 
-        problems: list[ProblemInfo] = []
-        for level, _ in enumerate(self.points[0], 1):
-            for _n in range(20 - level):
-                dummy_id = 1500 + len(problems)
-                likes = random.randint(0, level)
-                if random.randint(0, 1) == 0:
-                    org = "Official"
-                    used_in = ""
-                else:
-                    org = "JAG"
-                    used_in = ""
-                problems.append(
-                    ProblemInfo(
-                        contest_type=0,
-                        name=f"Mock Domestic Problem {dummy_id}",
-                        level=level,
-                        aoj_id=dummy_id,
-                        org=org,
-                        year=random.randint(2010, 2024),
-                        used_in=used_in,
-                        slot="ABCDEFGH"[random.randint(0, 7)],
-                        en=True,
-                        ja=True,
-                        likes=likes,
-                        inherited_likes=0,
-                        official_editorials=[],
-                        participated_teams=300,
-                        solved_teams=120,
-                        user_editorials=[],
-                        authors="someone",
-                    )
-                )
-
-        for level, _ in enumerate(self.points[1], 1):
-            for _n in range(40 - level):
-                dummy_id = 2000 + len(problems)
-                ja = False
-                en = True
-                if random.randint(0, 4) == 0:
-                    ja = True
-                    en = False
-                likes = random.randint(0, level)
-                if random.randint(0, 2) == 0:
-                    org = "Official"
-                    used_in = ""
-                else:
-                    org = "JAG"
-                    used_in = "Practice"
-                url = (
-                    "https://jag-icpc.org/?2014%2FPractice%2F%E6%98%A5%E3%82"
-                    + "%B3%E3%83%B3%E3%83%86%E3%82%B9%E3%83%88%2F%E8%AC%9B%E8%A9%95"
-                )
-                problems.append(
-                    ProblemInfo(
-                        contest_type=1,
-                        name=f"Mock Regional Problem {dummy_id}",
-                        level=level,
-                        aoj_id=dummy_id,
-                        org=org,
-                        year=random.randint(2010, 2024),
-                        used_in=used_in,
-                        slot="ABCDEFGHIJK"[random.randint(0, 10)],
-                        en=en,
-                        ja=ja,
-                        likes=likes,
-                        inherited_likes=0,
-                        official_editorials=[
-                            Editorial(
-                                en=True,
-                                ja=False,
-                                url=url,
-                            )
-                        ],
-                        participated_teams=45,
-                        solved_teams=14,
-                        user_editorials=[],
-                        authors="someone",
-                    )
-                )
-        self.problems = problems
-
-        self.problems_dict = {problem.aoj_id: problem for problem in self.problems}
-        n_users = 2000
-        self.aoj_users: dict[str, AOJUser] = {}
-        for i in range(n_users):
-            aoj_userid = f"user{i}"
-            aoj_ids = set()
-            for problem in self.problems:
-                if random.randint(0, 3) == 0:
-                    aoj_ids.add(problem.aoj_id)
-
-            aoj_user = AOJUser.from_aoj_ids(
-                aoj_userid, aoj_ids, self.problems_dict, self.points
-            )
-            self.aoj_users[aoj_userid] = aoj_user
-
-
-mock_data = MockData()
-like_data: dict[int, set[int]] = {}
-
-
-class MockInternalFunctions(InterfaceInternalFunctions):
-
-    def __init__(self, *args: Any) -> None:
-        pass
+    def __init__(self, conn: psycopg.Connection) -> None:
+        self.conn = conn
 
     def get_points(self, contest_type: int) -> list[int]:
-        return mock_data.points[contest_type]
+        return POINTS[contest_type]
 
     def get_problems(
         self, preference: Preference, user_solved_problems: set[int]

@@ -1,0 +1,4 @@
+.mypy_cache
+.pgadmin
+.postgres-data
+__pycache__
