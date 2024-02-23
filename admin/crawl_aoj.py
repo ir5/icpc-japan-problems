@@ -12,7 +12,7 @@ def get_problem_ids(conn: psycopg.Connection) -> list[int]:
         return problem_ids
 
 
-def main(conn) -> None:
+def main(conn: psycopg.Connection) -> None:
     craw_interval_second = 60
 
     problem_ids: list[int] = []
