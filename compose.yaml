@@ -8,15 +8,15 @@ services:
       FASTAPI_PORT: 8000
       FASTAPI_HOST: 0.0.0.0
       FASTAPI_RELOAD: 1
+      POSTGRES_USER:
+      POSTGRES_PASSWORD:
+      POSTGRES_DB:
       USE_MOCK:
       DUMMY_LOGIN:
     ports:
       - "8000:8000"
-      # volumes:
-      # - ./ijproblems:/app/ijproblems
-      # - ./static:/app/static
-      # - ./templates:/app/templates
-      # - ./main.py:/app/.
+    volumes:
+      - ./:/app/.
     restart: "no"
 
   postgres:
