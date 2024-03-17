@@ -1,12 +1,14 @@
 from typing import Any
 
-from fastapi import APIRouter, HTTPException, Request
+import psycopg
+from fastapi import APIRouter, Depends, HTTPException, Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 
 from ijproblems.internal_functions import get_internal_functions
 from ijproblems.internal_functions.github_app import GITHUB_APP_CLIENT_ID
 from ijproblems.routers.utils.cookie import get_preference_from_cookie
+from ijproblems.routers.utils.database import get_db_conn
 
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
@@ -16,8 +18,9 @@ templates = Jinja2Templates(directory="templates")
 def get_problems(
     request: Request,
     aoj_id: int,
+    conn: psycopg.Connection = Depends(get_db_conn),
 ) -> Any:
-    functions = get_internal_functions()
+    functions = get_internal_functions(conn)
     context: dict[str, Any] = {}
 
     problem = functions.get_problem(aoj_id)

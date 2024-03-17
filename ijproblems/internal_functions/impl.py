@@ -99,10 +99,43 @@ class ImplInternalFunctions(InterfaceInternalFunctions):
         )
 
     def get_problem(self, aoj_id: int) -> Optional[ProblemInfo]:
-        raise NotImplementedError
+        with self.conn.cursor(row_factory=class_row(ProblemInfo)) as cursor:
+            res = cursor.execute(
+                "SELECT contest_type,"
+                "name,"
+                "level,"
+                "problem_id AS aoj_id,"
+                "org,"
+                "year,"
+                "used_in,"
+                "slot,"
+                "en,"
+                "ja,"
+                "inherited_likes,"
+                "meta "
+                "FROM problems "
+                "WHERE problem_id=%(problem_id)s",
+                {"problem_id": aoj_id},
+            ).fetchone()
+        if res is None:
+            return None
+        parse_meta(res)
+        return res
 
     def get_solved_user_count(self, aoj_id: int) -> int:
-        raise NotImplementedError
+        res = self.conn.execute(
+            "SELECT COUNT(*) AS count "
+            "FROM aoj_acceptances "
+            "WHERE problem_id=%(problem_id)s ",
+            {
+                "problem_id": aoj_id,
+            },
+        ).fetchone()
+
+        if res is None:
+            raise Exception("counting failed")
+
+        return res[0]
 
     def get_problems_total_row(self, contest_type: int) -> RankingRow:
         level_counts = self.conn.execute(
