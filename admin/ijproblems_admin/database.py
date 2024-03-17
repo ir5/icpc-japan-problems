@@ -55,17 +55,18 @@ def recompute_point(
             if contest_type_ == contest_type:
                 solved[level - 1] = count
         total = sum(s * p for s, p in zip(solved, POINTS[contest_type]))
+        if total == 0:
+            continue
         counts = json.dumps(solved)
 
         print(aoj_userid, total, contest_type, counts)
 
         cursor.execute(
             "INSERT INTO user_points "
-            "(aoj_userid, total, contest_type, counts_per_levels) "
+            "(aoj_userid, contest_type, total, counts_per_levels) "
             "VALUES (%(aoj_userid)s, %(total)s, %(contest_type)s, %(counts)s)"
-            "ON CONFLICT (aoj_userid) DO UPDATE "
+            "ON CONFLICT (aoj_userid, contest_type) DO UPDATE "
             "SET total = EXCLUDED.total, "
-            "contest_type = EXCLUDED.contest_type, "
             "counts_per_levels = EXCLUDED.counts_per_levels",
             {
                 "aoj_userid": aoj_userid,
