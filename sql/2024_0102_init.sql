@@ -36,9 +36,4 @@ CREATE TABLE likes (
   PRIMARY KEY (github_id, problem_id)
 );
 CREATE INDEX ON likes (problem_id);
-
-CREATE TABLE like_counts (
-  problem_id  INTEGER NOT NULL,
-  weight      INTEGER NOT NULL DEFAULT 0,
-  PRIMARY KEY (problem_id)
-);
+CREATE INDEX ON likes (github_id);

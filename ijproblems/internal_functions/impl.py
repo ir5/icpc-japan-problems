@@ -30,7 +30,7 @@ class ProblemTableRow:
     en: int
     ja: int
     inherited_likes: int
-    likes: int
+    likes_github: int
 
     def __post_init__(self) -> None:
         for field in dataclasses.fields(self):
@@ -74,7 +74,7 @@ class ImplInternalFunctions(InterfaceInternalFunctions):
                 "P.en AS en,"
                 "P.ja AS ja,"
                 "P.inherited_likes AS inherited_likes,"
-                "COUNT(L.github_id) AS likes "
+                "COUNT(L.github_id) AS likes_github "
                 "FROM problems AS P "
                 "LEFT JOIN likes AS L ON P.problem_id = L.problem_id "
                 "WHERE P.contest_type=%(contest_type)s "
@@ -86,9 +86,18 @@ class ImplInternalFunctions(InterfaceInternalFunctions):
                 },
             ).fetchall()
 
+        def to_problem_info(row: ProblemTableRow) -> ProblemInfo:
+            likes = row.likes_github + row.inherited_likes
+            obj = asdict(row)
+            del obj["likes_github"]
+            return ProblemInfo(
+                **obj,
+                likes=likes,
+            )
+
         return sorted(
             [
-                ProblemInfo(**asdict(problem))
+                to_problem_info(problem)
                 for problem in problems_row
                 if ((preference.ja and problem.ja) or (preference.en and problem.en))
                 and not (
@@ -180,10 +189,61 @@ class ImplInternalFunctions(InterfaceInternalFunctions):
             return None
 
     def get_likes(self, github_id: int) -> set[int]:
-        return set()
+        res = self.conn.execute(
+            "SELECT problem_id " "FROM likes " "WHERE github_id=%(github_id)s ",
+            {
+                "github_id": github_id,
+            },
+        ).fetchall()
+        return set(entry for entry, in res)
 
     def set_like(self, github_id: int, aoj_id: int, value: int) -> int:
-        raise NotImplementedError
+        inherited_likes_res = self.conn.execute(
+            "SELECT inherited_likes FROM problems WHERE problem_id=%(problem_id)s",
+            {"problem_id": aoj_id},
+        ).fetchone()
+
+        if inherited_likes_res is None:
+            raise Exception(f"invalid aoj_id: {aoj_id}")
+
+        (inherited_likes,) = inherited_likes_res
+
+        if value == 0:
+            self.conn.execute(
+                "DELETE FROM likes "
+                "WHERE github_id=%(github_id)s AND problem_id=%(problem_id)s ",
+                {
+                    "github_id": github_id,
+                    "problem_id": aoj_id,
+                },
+            )
+        elif value == 1:
+            self.conn.execute(
+                "INSERT INTO likes (github_id, problem_id) "
+                "VALUES (%(github_id)s, %(problem_id)s) "
+                "ON CONFLICT (github_id, problem_id) DO NOTHING",
+                {
+                    "github_id": github_id,
+                    "problem_id": aoj_id,
+                },
+            )
+        else:
+            raise NotImplementedError
+
+        self.conn.commit()
+        likes_res = self.conn.execute(
+            "SELECT COUNT(*) AS count " "FROM likes WHERE problem_id=%(problem_id)s",
+            {
+                "problem_id": aoj_id,
+            },
+        ).fetchone()
+
+        if likes_res is None:
+            raise Exception("database error")
+
+        (likes,) = likes_res
+
+        return inherited_likes + likes
 
     def get_user_local_ranking(
         self, contest_type: int, aoj_userids: list[str]
