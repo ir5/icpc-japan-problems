@@ -42,21 +42,14 @@
     <li><a href="https://onlinejudge.u-aizu.ac.jp/solutions/problem/{{ problem.aoj_id }}" target="_blank">{{ problem_solved_user_count }} users</a> (in AOJ)</li>
   </ul>
 
-  {% if problem.official_editorials | length %}
-  <h2>Official Editorials</h2>
+  {% if problem.editorials %}
+  <h2>Editorials</h2>
   <ul>
-    {% for editorial in problem.official_editorials %}
+    {% for editorial in problem.editorials %}
     <li><a href="{{ editorial.url }}" target="_blank">{{ editorial.unquote_url() }}</a></li>
     {% endfor %}
   </ul>
   {% endif %}
-
-  <h2>User Editorials</h2>
-  <ul>
-    {% for editorial in problem.user_editorials %}
-    <li><a href="{{ editorial.url }}" target="_blank">{{ editorial.unquote_url() }}</a></li>
-    {% endfor %}
-  </ul>
 
   {% if problem.authors | length %}
   <h2>Authors</h2>

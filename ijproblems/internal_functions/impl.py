@@ -112,7 +112,7 @@ class ImplInternalFunctions(InterfaceInternalFunctions):
                 "SELECT contest_type,"
                 "name,"
                 "level,"
-                "problem_id AS aoj_id,"
+                "P.problem_id AS aoj_id,"
                 "org,"
                 "year,"
                 "used_in,"
@@ -120,14 +120,18 @@ class ImplInternalFunctions(InterfaceInternalFunctions):
                 "en,"
                 "ja,"
                 "inherited_likes,"
-                "meta "
-                "FROM problems "
-                "WHERE problem_id=%(problem_id)s",
+                "meta,"
+                "COUNT(L.github_id) AS likes "
+                "FROM problems AS P "
+                "LEFT JOIN likes AS L ON P.problem_id = L.problem_id "
+                "WHERE P.problem_id=%(problem_id)s "
+                "GROUP BY P.problem_id",
                 {"problem_id": aoj_id},
             ).fetchone()
         if res is None:
             return None
         parse_meta(res)
+        res.likes += res.inherited_likes
         return res
 
     def get_solved_user_count(self, aoj_id: int) -> int:
