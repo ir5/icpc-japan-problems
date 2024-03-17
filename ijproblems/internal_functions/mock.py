@@ -45,10 +45,9 @@ class MockData:
                         ja=True,
                         likes=likes,
                         inherited_likes=0,
-                        official_editorials=[],
+                        editorials=[],
                         participated_teams=300,
                         solved_teams=120,
-                        user_editorials=[],
                         authors="someone",
                     )
                 )
@@ -86,8 +85,9 @@ class MockData:
                         ja=ja,
                         likes=likes,
                         inherited_likes=0,
-                        official_editorials=[
+                        editorials=[
                             Editorial(
+                                official=True,
                                 en=True,
                                 ja=False,
                                 url=url,
@@ -95,7 +95,6 @@ class MockData:
                         ],
                         participated_teams=45,
                         solved_teams=14,
-                        user_editorials=[],
                         authors="someone",
                     )
                 )

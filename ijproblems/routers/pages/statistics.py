@@ -4,7 +4,7 @@ from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 
-from ijproblems.internal_functions import InternalFunctions
+from ijproblems.internal_functions import get_internal_functions
 from ijproblems.internal_functions.github_app import GITHUB_APP_CLIENT_ID
 from ijproblems.routers.utils.cookie import get_preference_from_cookie
 
@@ -17,7 +17,7 @@ def get_problems(
     request: Request,
     aoj_id: int,
 ) -> Any:
-    functions = InternalFunctions()
+    functions = get_internal_functions()
     context: dict[str, Any] = {}
 
     problem = functions.get_problem(aoj_id)

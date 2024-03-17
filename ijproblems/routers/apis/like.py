@@ -3,14 +3,14 @@ from typing import Any
 from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import JSONResponse
 
-from ijproblems.internal_functions import InternalFunctions
+from ijproblems.internal_functions import get_internal_functions
 
 router = APIRouter()
 
 
 @router.post("/api/user/like", response_class=JSONResponse, name="api_post_like")
 def post_like(request: Request, aoj_id: int, value: int) -> Any:
-    functions = InternalFunctions()
+    functions = get_internal_functions()
     github_login_info = functions.get_github_login_info(request)
     if github_login_info is None:
         raise HTTPException(status_code=401)

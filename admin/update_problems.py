@@ -98,6 +98,7 @@ def main(conn: psycopg.Connection) -> None:
             if key in row and row[key] != "":
                 editorials.append(
                     {
+                        "official": True,
                         "en": key.endswith("en"),
                         "ja": key.endswith("ja"),
                         "url": row[key],
@@ -106,7 +107,9 @@ def main(conn: psycopg.Connection) -> None:
 
         for key in ("user_editorial1", "user_editorial2"):
             if key in row and row[key] != "":
-                editorials.append({"en": False, "ja": True, "url": row[key]})
+                editorials.append(
+                    {"official": False, "en": False, "ja": True, "url": row[key]}
+                )
         meta["editorials"] = editorials
         row["meta"] = json.dumps(meta, sort_keys=True)
 

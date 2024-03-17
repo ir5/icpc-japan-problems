@@ -1,6 +1,6 @@
 import abc
 from abc import abstractmethod
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Optional
 from urllib.parse import unquote
 
@@ -23,6 +23,7 @@ AOJAcceptanceInfo = dict[int, list[str]]
 
 @dataclass
 class Editorial:
+    official: bool
     en: bool
     ja: bool
     url: str
@@ -44,16 +45,16 @@ class ProblemInfoBase:
     en: bool
     ja: bool
     inherited_likes: int
-    official_editorials: list[Editorial]
-    participated_teams: int
-    solved_teams: int
-    user_editorials: list[Editorial]
-    authors: str
+    editorials: list[Editorial] = field(default_factory=list)
+    participated_teams: int = 0
+    solved_teams: int = 0
+    authors: str = ""
 
 
 @dataclass
 class ProblemInfo(ProblemInfoBase):
-    likes: int
+    likes: int = 0
+    meta: str = ""
 
 
 @dataclass

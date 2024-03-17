@@ -1,7 +1,11 @@
+import dataclasses
+import json
+from dataclasses import asdict, dataclass
 from typing import Optional
 
 import psycopg
 from fastapi import Request
+from psycopg.rows import class_row
 
 from ijproblems.internal_functions.interface import (
     AOJUser,
@@ -15,6 +19,40 @@ from ijproblems.internal_functions.interface import (
 from ijproblems.internal_functions.points import POINTS
 
 
+@dataclass
+class ProblemTableRow:
+    contest_type: int
+    name: str
+    level: int
+    aoj_id: int
+    org: str
+    year: int
+    used_in: str
+    slot: str
+    en: int
+    ja: int
+    inherited_likes: int
+    likes: int
+
+    def __post_init__(self) -> None:
+        for field in dataclasses.fields(self):
+            value = getattr(self, field.name)
+            setattr(self, field.name, field.type(value))
+
+
+def parse_meta(problem_info: ProblemInfo) -> None:
+    meta = problem_info.meta
+    meta_obj = json.loads(meta)
+
+    for key in ("solved_teams", "participated_teams", "authors"):
+        if key in meta_obj:
+            setattr(problem_info, key, meta_obj[key])
+
+    problem_info.editorials = [
+        Editorial(**editorial) for editorial in meta_obj["editorials"]
+    ]
+
+
 class ImplInternalFunctions(InterfaceInternalFunctions):
 
     def __init__(self, conn: psycopg.Connection) -> None:
@@ -26,7 +64,40 @@ class ImplInternalFunctions(InterfaceInternalFunctions):
     def get_problems(
         self, preference: Preference, user_solved_problems: set[int]
     ) -> list[ProblemInfo]:
-        raise NotImplementedError
+        # NOTE: meta info is ignored
+        with self.conn.cursor(row_factory=class_row(ProblemTableRow)) as cursor:
+            problems_row = cursor.execute(
+                "SELECT P.contest_type AS contest_type,"
+                "P.name AS name,"
+                "P.level AS level,"
+                "P.problem_id AS aoj_id,"
+                "P.org AS org,"
+                "P.year AS year,"
+                "P.en AS en,"
+                "P.ja AS ja,"
+                "P.inherited_likes AS inherited_likes,"
+                "COUNT(L.github_id) AS likes "
+                "FROM problems AS P "
+                "WHERE contest_type=%(contest_type)s "
+                "AND level>=%(level_scope)s "
+                "INNER JOIN likes AS L ON P.problem_id = L.problem_id",
+                {
+                    "contest_type": preference.contest_type,
+                    "level_scope": preference.level_scopes[preference.contest_type],
+                },
+            ).fetchall()
+
+        return sorted(
+            [
+                ProblemInfo(**asdict(problem))
+                for problem in problems_row
+                if ((preference.ja and problem.ja) or (preference.en and problem.en))
+                and not (
+                    preference.hide_solved and problem.aoj_id in user_solved_problems
+                )
+            ],
+            key=lambda problem: (problem.level, -problem.year, problem.aoj_id),
+        )
 
     def get_problem(self, aoj_id: int) -> Optional[ProblemInfo]:
         raise NotImplementedError
@@ -35,7 +106,26 @@ class ImplInternalFunctions(InterfaceInternalFunctions):
         raise NotImplementedError
 
     def get_problems_total_row(self, contest_type: int) -> RankingRow:
-        raise NotImplementedError
+        level_counts = self.conn.execute(
+            "SELECT level, COUNT(*) AS count "
+            "FROM problems "
+            "GROUP BY level "
+            "WHERE contest_type=%(contest_type)s ",
+            {
+                "contest_type": contest_type,
+            },
+        )
+        counts = [count for _level, count in sorted(level_counts)]
+        total_point = sum(
+            point * count for point, count in zip(POINTS[contest_type], counts)
+        )
+
+        return RankingRow(
+            aoj_userid="TOTAL",
+            total_point=total_point,
+            total_solved=sum(counts),
+            solved_counts=counts,
+        )
 
     def get_problem_acceptance_count(self, aoj_id: int) -> int:
         raise NotImplementedError
@@ -58,7 +148,7 @@ class ImplInternalFunctions(InterfaceInternalFunctions):
             return None
 
     def get_likes(self, github_id: int) -> set[int]:
-        raise NotImplementedError
+        return set()
 
     def set_like(self, github_id: int, aoj_id: int, value: int) -> int:
         raise NotImplementedError
@@ -66,7 +156,7 @@ class ImplInternalFunctions(InterfaceInternalFunctions):
     def get_user_local_ranking(
         self, contest_type: int, aoj_userids: list[str]
     ) -> list[RankingRow]:
-        raise NotImplementedError
+        return []
 
     def get_user_solved_problems(self, aoj_userid: str) -> set[int]:
-        raise NotImplementedError
+        return set()

@@ -7,7 +7,7 @@ from fastapi import APIRouter, Depends, HTTPException, Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 
-from ijproblems.internal_functions import InternalFunctions
+from ijproblems.internal_functions import get_internal_functions
 from ijproblems.internal_functions.github_app import GITHUB_APP_CLIENT_ID
 from ijproblems.internal_functions.interface import Preference
 from ijproblems.routers.utils.cookie import (
@@ -63,7 +63,7 @@ def get_problems(
 def _process_request(
     request: Request, preference: Preference, conn: psycopg.Connection
 ) -> Any:
-    functions = InternalFunctions(conn)
+    functions = get_internal_functions(conn)
     context: dict[str, Any] = {}
     context["preference"] = preference
     context["level_lower"] = preference.level_scopes[preference.contest_type]

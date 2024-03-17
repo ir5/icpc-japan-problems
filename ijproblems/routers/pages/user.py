@@ -4,7 +4,7 @@ from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 
-from ijproblems.internal_functions import InternalFunctions
+from ijproblems.internal_functions import get_internal_functions
 from ijproblems.internal_functions.github_app import GITHUB_APP_CLIENT_ID
 from ijproblems.internal_functions.interface import Preference
 
@@ -18,7 +18,7 @@ templates = Jinja2Templates(directory="templates")
 def get_problems(request: Request, aoj_userid: str, contest_type: int) -> Any:
     if contest_type not in [0, 1]:
         raise HTTPException(status_code=400)
-    functions = InternalFunctions()
+    functions = get_internal_functions()
     context: dict[str, Any] = {}
 
     context["points"] = functions.get_points(contest_type)
