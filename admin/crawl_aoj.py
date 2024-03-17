@@ -2,7 +2,7 @@ import time
 
 import psycopg
 import requests
-from ijproblems_admin.database import get_postgres_url, insert_aoj_aceptance
+from ijproblems_admin.database import get_postgres_url, insert_aoj_aceptance, recompute_point
 
 
 def get_problem_ids(conn: psycopg.Connection) -> list[int]:
@@ -32,23 +32,29 @@ def main(conn: psycopg.Connection) -> None:
             response = requests.get(url)
 
             if response.status_code != 200:
-                time.sleep(5)
+                time.sleep(10)
                 continue
             problem_ids.pop()
             solutions = response.json()
             users = set(solution["userId"] for solution in solutions)
             with conn.cursor() as cursor:
+                users_recompute = []
                 for aoj_userid in users:
-                    insert_aoj_aceptance(cursor, aoj_userid, problem_id)
+                    inserted_rows = insert_aoj_aceptance(cursor, aoj_userid, problem_id)
+
+                    if inserted_rows:
+                        users_recompute.append(aoj_userid)
+
+                recompute_point(cursor, aoj_userid)
             conn.commit()
 
         # crawl for latest status
-        time.sleep(5)
+        time.sleep(10)
         current_problem_ids = set(get_problem_ids(conn))
         url = "https://judgeapi.u-aizu.ac.jp/solutions"
         response = requests.get(url)
         if response.status_code != 200:
-            time.sleep(5)
+            time.sleep(10)
             continue
         solutions = response.json()
 
@@ -59,6 +65,7 @@ def main(conn: psycopg.Connection) -> None:
                     continue
                 aoj_userid = solution["userId"]
                 insert_aoj_aceptance(cursor, aoj_userid, problem_id)
+                users_recompute.append(aoj_userid)
         conn.commit()
 
         time.sleep(craw_interval_second)
