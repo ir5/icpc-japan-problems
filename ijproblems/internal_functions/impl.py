@@ -174,7 +174,16 @@ class ImplInternalFunctions(InterfaceInternalFunctions):
         raise NotImplementedError
 
     def get_user_count(self, contest_type: int) -> int:
-        raise NotImplementedError
+        # WIP
+        self.conn.execute(
+            "SELECT COUNT(*) AS count "
+            "FROM problems "
+            "WHERE contest_type=%(contest_type)s "
+            "GROUP BY level ",
+            {
+                "contest_type": contest_type,
+            },
+        )
 
     def get_github_login_info(self, request: Request) -> Optional[GitHubLoginInfo]:
         session = request.session
@@ -248,4 +257,9 @@ class ImplInternalFunctions(InterfaceInternalFunctions):
         return []
 
     def get_user_solved_problems(self, aoj_userid: str) -> set[int]:
-        return set()
+        res = self.conn.execute(
+            "SELECT problem_id FROM aoj_acceptances " "WHERE aoj_userid=%(aoj_userid)s",
+            {"aoj_userid": aoj_userid},
+        ).fetchall()
+
+        return set(entry for entry, in res)

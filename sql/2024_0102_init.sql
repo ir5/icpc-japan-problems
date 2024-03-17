@@ -25,10 +25,11 @@ CREATE TABLE problems (
 CREATE TABLE user_points (
   aoj_userid        VARCHAR(64) NOT NULL,
   total             INTEGER NOT NULL,
+  contest_type      INTEGER NOT NULL,
   counts_per_levels VARCHAR(255) NOT NULL,
   PRIMARY KEY (aoj_userid)
 );
-CREATE INDEX ON user_points (total DESC);
+CREATE INDEX ON user_points (contest_type, total DESC);
 
 CREATE TABLE likes (
   github_id   BIGINT NOT NULL,
