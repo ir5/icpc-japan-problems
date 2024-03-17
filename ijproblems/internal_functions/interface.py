@@ -141,10 +141,6 @@ class InterfaceInternalFunctions(metaclass=abc.ABCMeta):
         raise NotImplementedError
 
     @abstractmethod
-    def get_problem_acceptance_count(self, aoj_id: int) -> int:
-        raise NotImplementedError
-
-    @abstractmethod
     def get_global_ranking(
         self, contest_type: int, begin: int, end: int
     ) -> list[RankingRow]:

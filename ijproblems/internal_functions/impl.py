@@ -168,9 +168,6 @@ class ImplInternalFunctions(InterfaceInternalFunctions):
             solved_counts=counts,
         )
 
-    def get_problem_acceptance_count(self, aoj_id: int) -> int:
-        raise NotImplementedError
-
     def get_global_ranking(
         self, contest_type: int, begin: int, end: int
     ) -> list[RankingRow]:
