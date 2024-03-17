@@ -8,7 +8,6 @@ from fastapi import Request
 from psycopg.rows import class_row
 
 from ijproblems.internal_functions.interface import (
-    AOJUser,
     Editorial,
     GitHubLoginInfo,
     InterfaceInternalFunctions,

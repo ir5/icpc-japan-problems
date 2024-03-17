@@ -1,11 +1,11 @@
 import os
 import random
+from dataclasses import dataclass
 from typing import Any, Optional
 
 from fastapi import Request
 
 from ijproblems.internal_functions.interface import (
-    AOJUser,
     Editorial,
     GitHubLoginInfo,
     InterfaceInternalFunctions,
@@ -14,6 +14,52 @@ from ijproblems.internal_functions.interface import (
     RankingRow,
 )
 from ijproblems.internal_functions.points import POINTS
+
+
+@dataclass
+class AOJUser:
+    aoj_userid: str
+    total_point: list[int]
+    total_solved: list[int]
+    solved_counts: list[list[int]]
+    aoj_ids: set[int]
+
+    @classmethod
+    def from_aoj_ids(
+        cls,
+        aoj_userid: str,
+        aoj_ids: set[int],
+        problems: dict[int, ProblemInfo],
+        points: list[list[int]],
+    ) -> "AOJUser":
+        n = len(points)
+        total_point = [0] * n
+        total_solved = [0] * n
+        solved_counts = [[0] * len(points_element) for points_element in points]
+
+        for aoj_id in aoj_ids:
+            problem = problems[aoj_id]
+            contest_type = problem.contest_type
+            level = problem.level
+            total_point[contest_type] += points[contest_type][level - 1]
+            total_solved[contest_type] += 1
+            solved_counts[contest_type][level - 1] += 1
+
+        return AOJUser(
+            aoj_userid=aoj_userid,
+            total_point=total_point,
+            total_solved=total_solved,
+            solved_counts=solved_counts,
+            aoj_ids=aoj_ids,
+        )
+
+    def to_ranking_row(self, contest_type: int) -> RankingRow:
+        return RankingRow(
+            aoj_userid=self.aoj_userid,
+            total_point=self.total_point[contest_type],
+            total_solved=self.total_solved[contest_type],
+            solved_counts=self.solved_counts[contest_type],
+        )
 
 
 class MockData:
