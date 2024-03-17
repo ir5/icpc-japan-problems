@@ -64,7 +64,7 @@ def recompute_point(
         cursor.execute(
             "INSERT INTO user_points "
             "(aoj_userid, contest_type, total, counts_per_levels) "
-            "VALUES (%(aoj_userid)s, %(total)s, %(contest_type)s, %(counts)s)"
+            "VALUES (%(aoj_userid)s, %(contest_type)s, %(total)s, %(counts)s)"
             "ON CONFLICT (aoj_userid, contest_type) DO UPDATE "
             "SET total = EXCLUDED.total, "
             "counts_per_levels = EXCLUDED.counts_per_levels",
