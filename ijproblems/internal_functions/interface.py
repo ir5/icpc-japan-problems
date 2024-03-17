@@ -40,11 +40,11 @@ class ProblemInfoBase:
     aoj_id: int
     org: str
     year: int
-    used_in: str
-    slot: str
-    en: bool
-    ja: bool
-    inherited_likes: int
+    used_in: str = ""
+    slot: str = ""
+    en: bool = False
+    ja: bool = False
+    inherited_likes: int = 0
     editorials: list[Editorial] = field(default_factory=list)
     participated_teams: int = 0
     solved_teams: int = 0

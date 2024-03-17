@@ -27,8 +27,6 @@ class ProblemTableRow:
     aoj_id: int
     org: str
     year: int
-    used_in: str
-    slot: str
     en: int
     ja: int
     inherited_likes: int
@@ -78,9 +76,10 @@ class ImplInternalFunctions(InterfaceInternalFunctions):
                 "P.inherited_likes AS inherited_likes,"
                 "COUNT(L.github_id) AS likes "
                 "FROM problems AS P "
-                "WHERE contest_type=%(contest_type)s "
-                "AND level>=%(level_scope)s "
-                "INNER JOIN likes AS L ON P.problem_id = L.problem_id",
+                "LEFT JOIN likes AS L ON P.problem_id = L.problem_id "
+                "WHERE P.contest_type=%(contest_type)s "
+                "AND P.level>=%(level_scope)s "
+                "GROUP BY P.problem_id",
                 {
                     "contest_type": preference.contest_type,
                     "level_scope": preference.level_scopes[preference.contest_type],
@@ -109,8 +108,8 @@ class ImplInternalFunctions(InterfaceInternalFunctions):
         level_counts = self.conn.execute(
             "SELECT level, COUNT(*) AS count "
             "FROM problems "
-            "GROUP BY level "
-            "WHERE contest_type=%(contest_type)s ",
+            "WHERE contest_type=%(contest_type)s "
+            "GROUP BY level ",
             {
                 "contest_type": contest_type,
             },
