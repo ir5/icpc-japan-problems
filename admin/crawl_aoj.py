@@ -45,7 +45,8 @@ def main(conn: psycopg.Connection) -> None:
                     if inserted_rows:
                         users_recompute.append(aoj_userid)
 
-                recompute_point(cursor, aoj_userid)
+                for aoj_userid in users_recompute:
+                    recompute_point(cursor, aoj_userid)
             conn.commit()
 
         # crawl for latest status
