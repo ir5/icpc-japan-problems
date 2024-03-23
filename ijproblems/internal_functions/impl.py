@@ -37,6 +37,24 @@ class ProblemTableRow:
             setattr(self, field.name, field.type(value))
 
 
+@dataclass
+class RankingRowFromDatabase:
+    aoj_userid: str
+    total: int
+    counts_per_levels: str
+
+    def to_ranking_row(self) -> RankingRow:
+        counts: list[int] = json.loads(self.counts_per_levels)
+        solved = sum(counts)
+
+        return RankingRow(
+            aoj_userid=self.aoj_userid,
+            total_point=self.total,
+            total_solved=solved,
+            solved_counts=counts,
+        )
+
+
 def parse_meta(problem_info: ProblemInfo) -> None:
     meta = problem_info.meta
     meta_obj = json.loads(meta)
@@ -174,19 +192,34 @@ class ImplInternalFunctions(InterfaceInternalFunctions):
     def get_global_ranking(
         self, contest_type: int, begin: int, end: int
     ) -> list[RankingRow]:
-        raise NotImplementedError
+        with self.conn.cursor(row_factory=class_row(RankingRowFromDatabase)) as cursor:
+            res = cursor.execute(
+                "SELECT aoj_userid, total, counts_per_levels "
+                "FROM user_points "
+                "WHERE contest_type=%(contest_type)s "
+                "ORDER BY total DESC LIMIT %(limit)s OFFSET %(offset)s",
+                {
+                    "contest_type": contest_type,
+                    "limit": end - begin + 1,
+                    "offset": begin - 1,
+                }
+            ).fetchall()
+
+        return [row.to_ranking_row() for row in res]
 
     def get_user_count(self, contest_type: int) -> int:
-        # WIP
-        self.conn.execute(
+        res = self.conn.execute(
             "SELECT COUNT(*) AS count "
-            "FROM problems "
-            "WHERE contest_type=%(contest_type)s "
-            "GROUP BY level ",
+            "FROM user_points "
+            "WHERE contest_type=%(contest_type)s ",
             {
                 "contest_type": contest_type,
             },
-        )
+        ).fetchone()
+        if res is None:
+            raise Exception("database error")
+        count, = res
+        return count
 
     def get_github_login_info(self, request: Request) -> Optional[GitHubLoginInfo]:
         session = request.session
@@ -257,7 +290,31 @@ class ImplInternalFunctions(InterfaceInternalFunctions):
     def get_user_local_ranking(
         self, contest_type: int, aoj_userids: list[str]
     ) -> list[RankingRow]:
-        return []
+        with self.conn.cursor(row_factory=class_row(RankingRowFromDatabase)) as cursor:
+            ranking_rows = []
+            for aoj_userid in aoj_userids:
+                res = cursor.execute(
+                    "SELECT aoj_userid, total, counts_per_levels "
+                    "FROM user_points "
+                    "WHERE contest_type=%(contest_type)s "
+                    "AND aoj_userid=%(aoj_userid)s",
+                    {
+                        "contest_type": contest_type,
+                        "aoj_userid": aoj_userid
+                    }
+                ).fetchone()
+
+                if res is None:
+                    ranking_rows.append(RankingRow(
+                        aoj_userid=aoj_userid,
+                        total_point=0,
+                        total_solved=0,
+                        solved_counts=[0] * len(POINTS[contest_type])
+                    ))
+                else:
+                    ranking_rows.append(res.to_ranking_row())
+
+            return ranking_rows
 
     def get_user_solved_problems(self, aoj_userid: str) -> set[int]:
         res = self.conn.execute(

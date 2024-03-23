@@ -1,13 +1,15 @@
 from dataclasses import dataclass
 from typing import Any
 
-from fastapi import APIRouter, HTTPException, Request
+import psycopg
+from fastapi import APIRouter, Depends, HTTPException, Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 
 from ijproblems.internal_functions import get_internal_functions
 from ijproblems.internal_functions.github_app import GITHUB_APP_CLIENT_ID
 from ijproblems.routers.utils.cookie import get_preference_from_cookie
+from ijproblems.routers.utils.database import get_db_conn
 
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
@@ -25,10 +27,11 @@ USERS_IN_ONE_PAGE = 200
 @router.get("/ranking/", response_class=HTMLResponse, name="global_ranking")
 def get_global_ranking(
     request: Request,
+    conn: psycopg.Connection = Depends(get_db_conn),
 ) -> Any:
     preference = get_preference_from_cookie(request)
     page = 1
-    return get_global_ranking_page(request, preference.contest_type, page)
+    return get_global_ranking_page(request, preference.contest_type, page, conn)
 
 
 @router.get(
@@ -40,11 +43,12 @@ def get_global_ranking_page(
     request: Request,
     contest_type: int,
     page: int,
+    conn: psycopg.Connection = Depends(get_db_conn),
 ) -> Any:
     if contest_type not in [0, 1]:
         raise HTTPException(status_code=400)
 
-    functions = get_internal_functions()
+    functions = get_internal_functions(conn)
     context: dict[str, Any] = {}
 
     preference = get_preference_from_cookie(request)

@@ -1,12 +1,14 @@
 from typing import Any
 
-from fastapi import APIRouter, HTTPException, Request
+import psycopg
+from fastapi import APIRouter, Depends, HTTPException, Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 
 from ijproblems.internal_functions import get_internal_functions
 from ijproblems.internal_functions.github_app import GITHUB_APP_CLIENT_ID
 from ijproblems.internal_functions.interface import Preference
+from ijproblems.routers.utils.database import get_db_conn
 
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
@@ -15,10 +17,15 @@ templates = Jinja2Templates(directory="templates")
 @router.get(
     "/user/{aoj_userid}/{contest_type}", response_class=HTMLResponse, name="user"
 )
-def get_problems(request: Request, aoj_userid: str, contest_type: int) -> Any:
+def get_problems(
+    request: Request,
+    aoj_userid: str,
+    contest_type: int,
+    conn: psycopg.Connection = Depends(get_db_conn),
+) -> Any:
     if contest_type not in [0, 1]:
         raise HTTPException(status_code=400)
-    functions = get_internal_functions()
+    functions = get_internal_functions(conn)
     context: dict[str, Any] = {}
 
     context["points"] = functions.get_points(contest_type)
