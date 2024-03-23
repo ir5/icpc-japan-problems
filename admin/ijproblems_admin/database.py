@@ -1,5 +1,5 @@
-import os
 import json
+import os
 
 import psycopg
 
@@ -21,10 +21,7 @@ def insert_aoj_aceptance(
         "INSERT INTO aoj_acceptances (aoj_userid, problem_id) "
         "VALUES (%(aoj_userid)s, %(problem_id)s) "
         "ON CONFLICT (aoj_userid, problem_id) DO NOTHING",
-        {
-            "aoj_userid": aoj_userid,
-            "problem_id": problem_id
-        }
+        {"aoj_userid": aoj_userid, "problem_id": problem_id},
     )
     return res.rowcount
 
@@ -35,18 +32,14 @@ POINTS = [
 ]
 
 
-def recompute_point(
-    cursor: psycopg.Cursor, aoj_userid: str
-):
+def recompute_point(cursor: psycopg.Cursor, aoj_userid: str) -> None:
     res = cursor.execute(
         "SELECT P.level AS level, P.contest_type AS contest_type, COUNT(*) AS count "
         "FROM aoj_acceptances AS A "
         "JOIN problems AS P ON A.problem_id=P.problem_id "
         "WHERE A.aoj_userid=%(aoj_userid)s "
         "GROUP BY (P.level, P.contest_type)",
-        {
-            "aoj_userid": aoj_userid
-        }
+        {"aoj_userid": aoj_userid},
     ).fetchall()
 
     for contest_type in range(2):
@@ -72,6 +65,6 @@ def recompute_point(
                 "aoj_userid": aoj_userid,
                 "total": total,
                 "contest_type": contest_type,
-                "counts": counts
-            }
+                "counts": counts,
+            },
         )

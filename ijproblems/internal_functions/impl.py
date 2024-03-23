@@ -202,7 +202,7 @@ class ImplInternalFunctions(InterfaceInternalFunctions):
                     "contest_type": contest_type,
                     "limit": end - begin + 1,
                     "offset": begin - 1,
-                }
+                },
             ).fetchall()
 
         return [row.to_ranking_row() for row in res]
@@ -218,7 +218,7 @@ class ImplInternalFunctions(InterfaceInternalFunctions):
         ).fetchone()
         if res is None:
             raise Exception("database error")
-        count, = res
+        (count,) = res
         return count
 
     def get_github_login_info(self, request: Request) -> Optional[GitHubLoginInfo]:
@@ -298,19 +298,18 @@ class ImplInternalFunctions(InterfaceInternalFunctions):
                     "FROM user_points "
                     "WHERE contest_type=%(contest_type)s "
                     "AND aoj_userid=%(aoj_userid)s",
-                    {
-                        "contest_type": contest_type,
-                        "aoj_userid": aoj_userid
-                    }
+                    {"contest_type": contest_type, "aoj_userid": aoj_userid},
                 ).fetchone()
 
                 if res is None:
-                    ranking_rows.append(RankingRow(
-                        aoj_userid=aoj_userid,
-                        total_point=0,
-                        total_solved=0,
-                        solved_counts=[0] * len(POINTS[contest_type])
-                    ))
+                    ranking_rows.append(
+                        RankingRow(
+                            aoj_userid=aoj_userid,
+                            total_point=0,
+                            total_solved=0,
+                            solved_counts=[0] * len(POINTS[contest_type]),
+                        )
+                    )
                 else:
                     ranking_rows.append(res.to_ranking_row())
 

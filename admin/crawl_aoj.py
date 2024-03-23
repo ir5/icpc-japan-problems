@@ -2,7 +2,11 @@ import time
 
 import psycopg
 import requests
-from ijproblems_admin.database import get_postgres_url, insert_aoj_aceptance, recompute_point
+from ijproblems_admin.database import (
+    get_postgres_url,
+    insert_aoj_aceptance,
+    recompute_point,
+)
 
 
 def get_problem_ids(conn: psycopg.Connection) -> list[int]:
