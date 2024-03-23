@@ -21,6 +21,8 @@ services:
     volumes:
       - ./:/app/.
     restart: "no"
+    networks:
+      - backend_network
 
   postgres:
     image: postgres:16.1
@@ -36,6 +38,8 @@ services:
       - .postgres-data:/var/lib/postgresql/data
       - ./sql:/sql
     restart: "no"
+    networks:
+      - backend_network
 
   admin:
     image: ijproblems-admin
@@ -52,3 +56,22 @@ services:
     stdin_open: true
     tty: true
     restart: "no"
+    networks:
+      - backend_network
+
+  nginx:
+    image: nginx:1.25.4
+    container_name: ijproblems-nginx
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./static:/static
+    depends_on:
+      - server
+    networks:
+      - backend_network
+
+networks:
+  backend_network:
+    driver: bridge
