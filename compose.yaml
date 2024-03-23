@@ -37,19 +37,6 @@ services:
       - ./sql:/sql
     restart: "no"
 
-  pgadmin4:
-    image: dpage/pgadmin4:7.8
-    container_name: ijproblems-pgadmin4
-    ports:
-      - "8080:80"
-    volumes:
-      - .pgadmin:/var/lib/pgadmin
-    environment:
-      PGADMIN_DEFAULT_EMAIL: postgres@example.com
-      PGADMIN_DEFAULT_PASSWORD: postgres
-    hostname: pgadmin4
-    restart: "no"
-
   admin:
     image: ijproblems-admin
     build:

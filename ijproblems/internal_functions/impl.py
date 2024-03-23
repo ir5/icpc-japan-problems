@@ -313,7 +313,7 @@ class ImplInternalFunctions(InterfaceInternalFunctions):
                 else:
                     ranking_rows.append(res.to_ranking_row())
 
-            return ranking_rows
+            return sorted(ranking_rows, key=lambda row: -row.total_point)
 
     def get_user_solved_problems(self, aoj_userid: str) -> set[int]:
         res = self.conn.execute(
