@@ -17,6 +17,8 @@ services:
       - "8000:8000"
     volumes:
       - ./:/app/.
+    depends_on:
+      - postgres
     restart: "always"
 
   postgres:
@@ -40,6 +42,7 @@ services:
       dockerfile: ./admin/Dockerfile
     container_name: ijproblems-admin
     environment:
+      CRAWL_INTERVAL_SECOND: 60
       POSTGRES_USER:
       POSTGRES_PASSWORD:
       POSTGRES_DB:
@@ -48,6 +51,8 @@ services:
       - ./admin:/admin
     stdin_open: true
     tty: true
+    depends_on:
+      - postgres
     restart: "always"
 
   nginx:

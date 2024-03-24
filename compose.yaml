@@ -21,6 +21,8 @@ services:
     volumes:
       - ./:/app/.
     restart: "no"
+    depends_on:
+      - postgres
     networks:
       - backend_network
 
@@ -56,6 +58,8 @@ services:
     stdin_open: true
     tty: true
     restart: "no"
+    depends_on:
+      - postgres
     networks:
       - backend_network
 

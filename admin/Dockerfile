@@ -9,4 +9,4 @@ RUN --mount=type=cache,target=/root/.cache/pip \
 COPY ./admin/. .
 COPY ./.env .
 
-CMD ["sleep", "infinity"]
+CMD ["python3", "crawl_aoj.py"]

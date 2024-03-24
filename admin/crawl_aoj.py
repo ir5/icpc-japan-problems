@@ -1,3 +1,4 @@
+import os
 import time
 
 import psycopg
@@ -17,7 +18,11 @@ def get_problem_ids(conn: psycopg.Connection) -> list[int]:
 
 
 def main(conn: psycopg.Connection) -> None:
-    craw_interval_second = 60
+    crawl_interval_second = int(os.environ.get("CRAWL_INTERVAL_SECOND", "0"))
+    if crawl_interval_second <= 0:
+        print("Not crawling.")
+        while True:
+            time.sleep(1e9)
 
     problem_ids: list[int] = []
 
@@ -36,7 +41,7 @@ def main(conn: psycopg.Connection) -> None:
             response = requests.get(url)
 
             if response.status_code != 200:
-                time.sleep(10)
+                time.sleep(60)
                 continue
             problem_ids.pop()
             solutions = response.json()
@@ -59,7 +64,7 @@ def main(conn: psycopg.Connection) -> None:
         url = "https://judgeapi.u-aizu.ac.jp/solutions"
         response = requests.get(url)
         if response.status_code != 200:
-            time.sleep(10)
+            time.sleep(60)
             continue
         solutions = response.json()
 
@@ -73,7 +78,7 @@ def main(conn: psycopg.Connection) -> None:
                 users_recompute.append(aoj_userid)
         conn.commit()
 
-        time.sleep(craw_interval_second)
+        time.sleep(crawl_interval_second)
 
 
 if __name__ == "__main__":
