@@ -1,5 +1,5 @@
-black
-isort
-flake8
-mypy
-types-requests
+black==24.1.1
+isort==5.13.2
+flake8==7.0.0
+mypy==1.8.0
+types-requests==2.31.0.20240125
