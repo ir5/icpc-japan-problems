@@ -1,0 +1,63 @@
+services:
+  server:
+    image: ijproblems
+    build:
+      dockerfile: ./Dockerfile
+    container_name: ijproblems-server
+    environment:
+      FASTAPI_PORT: 8000
+      FASTAPI_HOST: 0.0.0.0
+      GITHUB_APP_CLIENT_ID:
+      GITHUB_APP_CLIENT_SECRET:
+      SESSION_SECRET:
+      POSTGRES_USER:
+      POSTGRES_PASSWORD:
+      POSTGRES_DB:
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./:/app/.
+    restart: "always"
+
+  postgres:
+    image: postgres:16.1
+    container_name: ijproblems-postgres
+    environment:
+      POSTGRES_USER:
+      POSTGRES_PASSWORD:
+      POSTGRES_DB:
+    hostname: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - .postgres-data:/var/lib/postgresql/data
+      - ./sql:/sql
+    restart: "always"
+
+  admin:
+    image: ijproblems-admin
+    build:
+      dockerfile: ./admin/Dockerfile
+    container_name: ijproblems-admin
+    environment:
+      POSTGRES_USER:
+      POSTGRES_PASSWORD:
+      POSTGRES_DB:
+      ADMIN_SHEET_ID:
+    volumes:
+      - ./admin:/admin
+    stdin_open: true
+    tty: true
+    restart: "always"
+
+  nginx:
+    image: nginx:1.25.4
+    container_name: ijproblems-nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.production.conf:/etc/nginx/nginx.conf:ro
+      - ./static:/static
+    depends_on:
+      - server
+    restart: "always"
