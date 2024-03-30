@@ -1,5 +1,6 @@
 import json
 import os
+from datetime import datetime
 
 import psycopg
 
@@ -15,13 +16,14 @@ def get_postgres_url() -> str:
 
 
 def insert_aoj_aceptance(
-    cursor: psycopg.Cursor, aoj_userid: str, problem_id: int
+    cursor: psycopg.Cursor, aoj_userid: str, problem_id: int, judged_at_unix_milli: int
 ) -> int:
+    judged_at = datetime.utcfromtimestamp(judged_at_unix_milli // 1000)
     res = cursor.execute(
-        "INSERT INTO aoj_acceptances (aoj_userid, problem_id) "
-        "VALUES (%(aoj_userid)s, %(problem_id)s) "
+        "INSERT INTO aoj_acceptances (aoj_userid, problem_id, judged_at) "
+        "VALUES (%(aoj_userid)s, %(problem_id)s, %(judged_at)s) "
         "ON CONFLICT (aoj_userid, problem_id) DO NOTHING",
-        {"aoj_userid": aoj_userid, "problem_id": problem_id},
+        {"aoj_userid": aoj_userid, "problem_id": problem_id, "judged_at": judged_at},
     )
     return res.rowcount
 

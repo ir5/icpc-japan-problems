@@ -1,6 +1,7 @@
 CREATE TABLE aoj_acceptances (
   aoj_userid  VARCHAR(64) NOT NULL,
   problem_id  INTEGER NOT NULL,
+  judged_at   TIMESTAMP NOT NULL,
   PRIMARY KEY (aoj_userid, problem_id)
 );
 CREATE INDEX ON aoj_acceptances (aoj_userid);
