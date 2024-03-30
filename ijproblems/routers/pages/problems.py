@@ -45,8 +45,12 @@ def get_problems(
 
     if level_lower_0 is not None:
         preference.level_scopes[0] = level_lower_0
+    else:
+        preference.level_scopes[0] = -1
     if level_lower_1 is not None:
         preference.level_scopes[1] = level_lower_1
+    else:
+        preference.level_scopes[1] = -1
 
     update_if_not_none("contest_type", contest_type)
     update_if_not_none("aoj_userid", aoj_userid)

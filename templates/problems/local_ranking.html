@@ -7,7 +7,7 @@
     <td class="no-border"></td>
     <td class="no-border"></td>
     {% for point in points %}
-    <td class="no-border">{% if level_lower <= loop.index %}&#x25BC;{% endif %}</td>
+    <td class="no-border">{% if level_lower == loop.index or level_lower <= 0 %}&#x25BC;{% endif %}</td>
     {% endfor %}
   </tr>
   <tr>

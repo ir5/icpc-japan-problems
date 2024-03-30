@@ -5,7 +5,7 @@ function onRemoveRival(redirectUrl, rivalName) {
 function onChangePreference(redirectUrl, contestType = null, removeRivalName = null) {
   let params = {}
   // values
-  for (const id of ["aoj_userid", "level_lower_0", "level_lower_1"]) {
+  for (const id of ["aoj_userid"]) {
     params[id] = document.getElementById(id).value;
   }
   // checkboxes

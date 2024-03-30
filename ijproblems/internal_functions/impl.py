@@ -95,7 +95,7 @@ class ImplInternalFunctions(InterfaceInternalFunctions):
                 "FROM problems AS P "
                 "LEFT JOIN likes AS L ON P.problem_id = L.problem_id "
                 "WHERE P.contest_type=%(contest_type)s "
-                "AND P.level>=%(level_scope)s "
+                "AND (%(level_scope)s <= 0 OR P.level = %(level_scope)s)"
                 "GROUP BY P.problem_id",
                 {
                     "contest_type": preference.contest_type,

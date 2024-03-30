@@ -184,7 +184,7 @@ class MockInternalFunctions(InterfaceInternalFunctions):
                 problem
                 for problem in mock_data.problems
                 if problem.contest_type == contest_type
-                and problem.level >= begin
+                and problem.level == begin
                 and ((preference.ja and problem.ja) or (preference.en and problem.en))
                 and not (
                     preference.hide_solved and problem.aoj_id in user_solved_problems
