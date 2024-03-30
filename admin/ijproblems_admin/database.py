@@ -37,6 +37,7 @@ POINTS = [
 
 
 def recompute_point(cursor: psycopg.Cursor, aoj_userid: str) -> None:
+    aoj_userid = aoj_userid.lower()
     res = cursor.execute(
         "SELECT P.level AS level, P.contest_type AS contest_type, COUNT(*) AS count "
         "FROM aoj_acceptances AS A "
