@@ -298,13 +298,13 @@ class ImplInternalFunctions(InterfaceInternalFunctions):
                     "FROM user_points "
                     "WHERE contest_type=%(contest_type)s "
                     "AND aoj_userid=%(aoj_userid)s",
-                    {"contest_type": contest_type, "aoj_userid": aoj_userid},
+                    {"contest_type": contest_type, "aoj_userid": aoj_userid.lower()},
                 ).fetchone()
 
                 if res is None:
                     ranking_rows.append(
                         RankingRow(
-                            aoj_userid=aoj_userid,
+                            aoj_userid=aoj_userid.lower(),
                             total_point=0,
                             total_solved=0,
                             solved_counts=[0] * len(POINTS[contest_type]),
@@ -318,7 +318,7 @@ class ImplInternalFunctions(InterfaceInternalFunctions):
     def get_user_solved_problems(self, aoj_userid: str) -> set[int]:
         res = self.conn.execute(
             "SELECT problem_id FROM aoj_acceptances " "WHERE aoj_userid=%(aoj_userid)s",
-            {"aoj_userid": aoj_userid},
+            {"aoj_userid": aoj_userid.lower()},
         ).fetchall()
 
         return set(entry for entry, in res)

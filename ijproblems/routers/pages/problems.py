@@ -70,9 +70,9 @@ def _process_request(
     context["points"] = functions.get_points(preference.contest_type)
     context["total_row"] = functions.get_problems_total_row(preference.contest_type)
 
-    userids = set(preference.rivals)
+    userids = set(name.lower() for name in preference.rivals)
     if preference.aoj_userid:
-        userids.add(preference.aoj_userid)
+        userids.add(preference.aoj_userid.lower())
     context["local_ranking"] = functions.get_user_local_ranking(
         preference.contest_type, list(userids)
     )

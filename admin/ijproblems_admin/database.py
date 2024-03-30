@@ -18,6 +18,8 @@ def get_postgres_url() -> str:
 def insert_aoj_aceptance(
     cursor: psycopg.Cursor, aoj_userid: str, problem_id: int, judged_at_unix_milli: int
 ) -> int:
+    # Important! aoj API sometimes returns capitalized user ID
+    aoj_userid = aoj_userid.lower()
     judged_at = datetime.utcfromtimestamp(judged_at_unix_milli // 1000)
     res = cursor.execute(
         "INSERT INTO aoj_acceptances (aoj_userid, problem_id, judged_at) "

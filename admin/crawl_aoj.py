@@ -46,8 +46,7 @@ def main(conn: psycopg.Connection) -> None:
             problem_ids.pop()
             solutions = response.json()
             users = {
-                solution["userId"].lower(): solution["judgeDate"]
-                for solution in solutions
+                solution["userId"]: solution["judgeDate"] for solution in solutions
             }
             with conn.cursor() as cursor:
                 users_recompute = []
