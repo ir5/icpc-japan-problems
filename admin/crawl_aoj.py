@@ -46,7 +46,7 @@ def main(conn: psycopg.Connection) -> None:
             problem_ids.pop()
             solutions = response.json()
             users = {
-                solution["userId"]: solution["judgeDate"] for solution in solutions
+                solution["userId"]: solution["submissionDate"] for solution in solutions
             }
             with conn.cursor() as cursor:
                 users_recompute = []
@@ -78,7 +78,7 @@ def main(conn: psycopg.Connection) -> None:
                 if problem_id not in current_problem_ids:
                     continue
                 aoj_userid = solution["userId"]
-                date_unixmilli = solution["judgeDate"]
+                date_unixmilli = solution["submissionDate"]
                 insert_aoj_aceptance(cursor, aoj_userid, problem_id, date_unixmilli)
                 users_recompute.append(aoj_userid)
         conn.commit()
