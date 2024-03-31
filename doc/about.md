@@ -53,3 +53,9 @@ Similarly, for regional contests, the number of participating teams are assumed 
 ## Likes
 
 You can leave "likes" for problems that you find beneficial for training..
+
+
+
+## Excluded problems
+
+Some old problems are excluded from the problem list because they are probably not good for training. The list of the excluded problems can be seen [here](excluded_problems.md).
