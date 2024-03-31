@@ -10,8 +10,16 @@
   <ul class="nav">
     <li class="menu"><a href="{{ url_for('problems') }}">Problems</a></li>
     <li class="menu"><a href="{{ url_for('global_ranking') }}">Ranking</a></li>
-    <li class="menu"><a>About</a></li>
-    <li class="menu"><a>Discord</a></li>
+    <li class="menu"><a target="_blank" href="https://github.com/ir5/icpc-japan-problems/blob/main/doc/about.md">About</a></li>
+    <li class="menu">
+      <div class="dropdown">
+        <a>Feedback&#9660;</a>
+        <div class="dropdown-content">
+          <a target="_blank" href="https://twitter.com/intent/post?text=%23ICPCJapanProblems">Tweet</a>
+          <a target="_blank" href="https://github.com/ir5/icpc-japan-problems/pulls">GitHub Issues</a>
+        </div>
+      </div>
+    </li>
     <li class="menu">
       <div class="dropdown">
         <a>Links&#9660;</a>
