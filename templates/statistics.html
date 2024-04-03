@@ -25,7 +25,7 @@
           </a>
           <input type="hidden" id="like-{{problem.aoj_id}}" value="{{ 1 if problem.aoj_id in user_likes else 0 }}">
         </td>
-        <td><a href="https://onlinejudge.u-aizu.ac.jp/problems/{{ problem.aoj_id }}" target="_blank">{% if problem.ja %}&#x1f338;{% endif %}{% if problem.en %}&#x1f310;{% endif %}{{ problem.name }}</a></td>
+        <td><a href="https://onlinejudge.u-aizu.ac.jp/services/ice/?problemId={{ problem.aoj_id }}" target="_blank">{% if problem.ja %}&#x1f338;{% endif %}{% if problem.en %}&#x1f310;{% endif %}{{ problem.name }}</a></td>
         <td><a href="{{ url_for('statistics', aoj_id=problem.aoj_id) }}">&#x1f4ca;{{ problem.org }} {{ problem.year }}</a></td>
       </tr>
     </tbody>
