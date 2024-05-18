@@ -57,8 +57,6 @@ def recompute_point(cursor: psycopg.Cursor, aoj_userid: str) -> None:
             continue
         counts = json.dumps(solved)
 
-        print(aoj_userid, total, contest_type, counts)
-
         cursor.execute(
             "INSERT INTO user_points "
             "(aoj_userid, contest_type, total, counts_per_levels) "
